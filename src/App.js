@@ -1,25 +1,92 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from 'react'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import axios from 'axios'
+import Top from './components/Top'
+import Registration from './components/auth/Registration'
+import Login from './components/auth/Login'
+import './App.css'
 
-function App() {
+export default function App(props) {
+// useState
+  const [loggedInStatus, setLoggedInStatus] = useState("未ログイン")
+  const [user, setUser] = useState({})
+
+
+  const handleSuccessfulAuthentication = (data) => {
+    handleLogin(data)
+  }
+
+// ログイン状態切り替え時のレンダリング
+  const handleLogin = (data) => {
+    setLoggedInStatus("ログイン中")
+    setUser(data.user)
+  }
+
+// ログイン表示の切り替え
+  useEffect(() => {
+    checkLoginStatus()
+  })
+
+  // ログイン有無の確認
+  const checkLoginStatus = () => {
+    axios.get("http://localhost:3001/logged_in", { withCredentials: true })
+    .then(response => {
+      console.log(response)
+      if (response.data.logged_in && loggedInStatus === "未ログイン") {
+        setLoggedInStatus("ログインなう")
+        setUser(response.data.user)
+      } else if (!response.data.logged_in && loggedInStatus === "ログインなう") {
+        setLoggedInStatus("未ログイン")
+        setUser({})
+      }
+    })
+    .catch(error => {
+      console.log("ログインエラー", error)
+    })
+  }
+
+  // ログアウト機能
+  const handleLogoutClick = () => {
+    console.log('handleLogo')
+    axios.delete("http://localhost:3001/logout", { withCredentials: true })
+    .then(response => {
+      handleLogout()
+    }).catch(error => console.log("ログアウトエラー", error))
+  }
+
+  const handleLogout = () => {
+    console.log('handleLogout')
+    setLoggedInStatus("未ログイン")
+    setUser({})
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <BrowserRouter>
+        <>
+          <Routes>
+            <Route
+              path={"/"}
+              element=
+              {<Top />}
+            />
+            <Route
+              path={"/registration"}
+              element={<>
+                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
+                <Registration handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
+              </>}
+            />
+            <Route
+              path={"/login"}
+              element={<>
+                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
+                <Login handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
+              </>}
+            />
+          </Routes>
+        </>
+      </BrowserRouter>
     </div>
-  );
+  )
 }
-
-export default App;
