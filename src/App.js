@@ -4,6 +4,8 @@ import axios from 'axios'
 import Top from './components/Top'
 import Registration from './components/auth/Registration'
 import Login from './components/auth/Login'
+import Episode from './components/Episode'
+import AddEpisode from './components/AddEpisode'
 import './App.css'
 
 export default function App(props) {
@@ -66,9 +68,18 @@ export default function App(props) {
         <>
           <Routes>
             <Route
-              path={"/"}
-              element=
-              {<Top />}
+              path={"/episodes"}
+              element={<>
+                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
+                <Episode user={user}  />
+              </>}
+            />
+            <Route
+              path={"/episodes/new"}
+              element={<>
+                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
+                <AddEpisode />
+              </>}
             />
             <Route
               path={"/registration"}
