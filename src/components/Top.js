@@ -2,7 +2,6 @@ import {  Link } from 'react-router-dom'
 
 export default function Top(props) {
 
-
 // ログイン有無によるリンクの切り替え
   const loginitem = (loggedInStatus) => {
     if (loggedInStatus === "未ログイン") {
@@ -15,8 +14,6 @@ export default function Top(props) {
     }
   }
 
-  console.log(props.user.nickname)
-
   return (
     <div className='top'>
       {loginitem(props.loggedInStatus)}
@@ -26,10 +23,10 @@ export default function Top(props) {
           ライコン
         </h1>
         <div className='nav-items'>
-          <Link to="/Episodes" className='nav-item'>
+          <Link to="/episodes" className='nav-item'>
             エピソード
           </Link>
-          <Link to="/Posts" className='nav-item'>
+          <Link to="/episodes/new" className='nav-item'>
             投稿する
           </Link>
         </div>
