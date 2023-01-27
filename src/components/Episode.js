@@ -4,23 +4,25 @@ import axios from 'axios'
 
 const SearchForm = styled.input`
   font-size: 20px;
-  width: 100%;
+  width: 80%;
   height: 40px;
   margin: 10px 0;
   padding: 10px;
 `
 
 const List = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
   margin: 7px auto;
   padding: 10px;
   font-size: 25px;
 `
 
-const EpisodeContent = styled.span`
+const EpisodeContent = styled.div`
   font-size: 24px;
+`
+
+const ImageContent = styled.img`
+  height: 30vh;
+  width: 30vw;
 `
 
 export default function Episode() {
@@ -37,6 +39,7 @@ export default function Episode() {
       console.log(e);
     })
   }, [])
+
 
   return (
     <>
@@ -62,6 +65,8 @@ export default function Episode() {
           return(
             <List key={key}>
               <EpisodeContent>{val.title}</EpisodeContent>
+              <div>{val.explain}</div>
+              <ImageContent src={val.image_url} alt="画像" className="image-content"></ImageContent>
             </List>
           )
         })}
