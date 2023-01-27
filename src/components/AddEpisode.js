@@ -8,6 +8,7 @@ export default function AddEpisode(props) {
   const [category, setCategory] = useState("")
 	const [limit, setLimit] = useState("")
 	const [period, setPeriod] = useState("")
+	const [image, setImage] = useState({data: "", name: ""})
   const handleSubmit = (event) => {
     axios.post("http://localhost:3001/episodes/create",
       {
@@ -17,7 +18,8 @@ export default function AddEpisode(props) {
         price: price,
         category: category ,
 				limit: limit,
-				period: period
+				period: period,
+				image: image
       }
     },
     { withCredentials: true }
@@ -31,6 +33,23 @@ export default function AddEpisode(props) {
     })
     event.preventDefault()
 	}
+
+	const handleImageSelect = (e) => {
+		const reader = new FileReader()
+		const files = (e.target ).files
+		if (files) {
+			reader.onload = () => {
+				setImage({
+					data: reader.result ,
+					name: files[0] ? files[0].name : "unknownfile"
+				})
+			}
+			reader.readAsDataURL(files[0])
+			console.log(files[0])
+		}
+	}
+
+
 
 	return (
 		<div>
@@ -85,6 +104,8 @@ export default function AddEpisode(props) {
 						value={period}
 						onChange={event => setPeriod(event.target.value)}
 					/>
+					<label htmlFor="image">画像</label>
+					<input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
 					<button type="submit" className='btn'>登録</button>
 				</div>
 			</form>
