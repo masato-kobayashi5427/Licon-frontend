@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
+import { Link } from 'react-router-dom'
 
 const SearchForm = styled.input`
   font-size: 20px;
@@ -63,11 +64,14 @@ export default function Episode() {
           }
         }).map((val, key) => {
           return(
+            <Link to={"/episodes/" + val.id} className='nav-item'>
             <List key={key}>
+              <ImageContent src={val.image_url} alt="画像" className="image-content"></ImageContent>
               <EpisodeContent>{val.title}</EpisodeContent>
               <div>{val.explain}</div>
-              <ImageContent src={val.image_url} alt="画像" className="image-content"></ImageContent>
+              <div>{val.user.nickname}</div>
             </List>
+            </Link>
           )
         })}
       </div>
