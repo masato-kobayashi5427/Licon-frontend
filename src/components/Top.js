@@ -29,6 +29,9 @@ export default function Top(props) {
           <Link to="/episodes/new" className='nav-item'>
             投稿する
           </Link>
+          <Link to="/episode_rooms" className='nav-item'>
+            エピソードルーム
+          </Link>
         </div>
       </div>
     </div>

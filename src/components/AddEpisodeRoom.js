@@ -1,14 +1,18 @@
 import React, { useState } from 'react'
+import { useLocation } from "react-router-dom";
 import axios from 'axios'
 
 export default function AddEpisodeRoom(props) {
-
   const [name, setName] = useState("")
+  const location = useLocation();
+
   const handleSubmit = (event) => {
-    axios.post("http://localhost:3001/episode_rooms/new",
+    axios.post("http://localhost:3001/episode_rooms/create",
       {
         episode_room: {
         name: name,
+        episode_id: location.state.id,
+        user_ids: [location.state.user.id, props.user.id]
       }
     },
     { withCredentials: true }
@@ -32,7 +36,7 @@ return (
           className="textfield"
           type="name"
           name="name"
-          placeholder="タイトル"
+          placeholder="ルームネーム"
           value={name}
           onChange={event => setName(event.target.value)}
         />
