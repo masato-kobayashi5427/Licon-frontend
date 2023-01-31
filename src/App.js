@@ -34,7 +34,7 @@ export default function App(props) {
 
   // ログイン有無の確認
   const checkLoginStatus = () => {
-    axios.get("http://localhost:3001/logged_in")
+    axios.get("http://localhost:3001/logged_in", { withCredentials: true })
     .then(response => {
       console.log(response)
       if (response.data.logged_in && loggedInStatus === "未ログイン") {
@@ -116,7 +116,7 @@ export default function App(props) {
               path={"/episode_rooms"}
               element={<>
                 <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
-                <EpisodeRoomList />
+                <EpisodeRoomList user={user}/>
               </>}
             />
           </Routes>
