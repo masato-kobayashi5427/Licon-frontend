@@ -1,4 +1,4 @@
-import {  Link } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 export default function Top(props) {
 
@@ -28,6 +28,9 @@ export default function Top(props) {
           </Link>
           <Link to="/episodes/new" className='nav-item'>
             投稿する
+          </Link>
+          <Link to="/episode_rooms" className='nav-item'>
+            エピソードルーム
           </Link>
         </div>
       </div>

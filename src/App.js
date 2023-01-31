@@ -6,6 +6,9 @@ import Registration from './components/auth/Registration'
 import Login from './components/auth/Login'
 import Episode from './components/Episode'
 import AddEpisode from './components/AddEpisode'
+import DetailEpisode from './components/DetailEpisode'
+import AddEpisodeRoom from './components/AddEpisodeRoom'
+import EpisodeRoomList from './components/EpisodeRoomList'
 import './App.css'
 
 export default function App(props) {
@@ -93,6 +96,27 @@ export default function App(props) {
               element={<>
                 <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
                 <Login handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
+              </>}
+            />
+            <Route
+              path={"/episodes/:id"}
+              element={<>
+                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
+                <DetailEpisode />
+              </>}
+            />
+            <Route
+              path={"/episode_rooms/new"}
+              element={<>
+                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
+                <AddEpisodeRoom user={user} />
+              </>}
+            />
+            <Route
+              path={"/episode_rooms"}
+              element={<>
+                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
+                <EpisodeRoomList user={user}/>
               </>}
             />
           </Routes>
