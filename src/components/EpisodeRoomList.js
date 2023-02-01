@@ -26,12 +26,16 @@ export default function EpisodeRoomList(props) {
     <>
       <h1>EpisodeRoom List</h1>
       <div>
-        {episode_rooms.map((val, key) => {
+        {episode_rooms.filter(episode_room => {
+          return episode_room.id !== props.user.id
+        }).map((val, key) => {
           return(
         <li key={key}>
-          <div>{val.episode_room.name}</div>
-          <div>{val.user.nickname}</div>
-          <ImageContent src={val.episode_room.episode.image_url} alt="画像"></ImageContent>
+          <Link to={"/episode_rooms/" + val.id} state={ val.id } >
+            <div>{val.episode_room.name}</div>
+            <div>{val.user.nickname}</div>
+            <ImageContent src={val.episode_room.episode.image_url} alt="画像"></ImageContent>
+          </Link>
         </li>
         )})}
       </div>
