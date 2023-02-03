@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import Top from './components/Top'
 import Registration from './components/auth/Registration'
@@ -9,6 +9,7 @@ import AddEpisode from './components/AddEpisode'
 import DetailEpisode from './components/DetailEpisode'
 import AddEpisodeRoom from './components/AddEpisodeRoom'
 import EpisodeRoomList from './components/EpisodeRoomList'
+import EpisodeRoom from './components/EpisodeRoom'
 import './App.css'
 
 export default function App(props) {
@@ -16,17 +17,14 @@ export default function App(props) {
   const [loggedInStatus, setLoggedInStatus] = useState("未ログイン")
   const [user, setUser] = useState({})
 
-
   const handleSuccessfulAuthentication = (data) => {
     handleLogin(data)
   }
-
 // ログイン状態切り替え時のレンダリング
   const handleLogin = (data) => {
     setLoggedInStatus("ログイン中")
     setUser(data.user)
   }
-
 // ログイン表示の切り替え
   useEffect(() => {
     checkLoginStatus()
@@ -69,54 +67,54 @@ export default function App(props) {
     <div>
       <BrowserRouter>
         <>
+        <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
           <Routes>
             <Route
               path={"/episodes"}
               element={<>
-                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
                 <Episode user={user}  />
               </>}
             />
             <Route
               path={"/episodes/new"}
               element={<>
-                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
-                <AddEpisode />
+                <AddEpisode user={user}/>
               </>}
             />
             <Route
               path={"/registration"}
               element={<>
-                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
                 <Registration handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
               </>}
             />
             <Route
               path={"/login"}
               element={<>
-                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
                 <Login handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
               </>}
             />
             <Route
               path={"/episodes/:id"}
               element={<>
-                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
                 <DetailEpisode />
               </>}
             />
             <Route
               path={"/episode_rooms/new"}
               element={<>
-                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
                 <AddEpisodeRoom user={user} />
               </>}
             />
             <Route
               path={"/episode_rooms"}
               element={<>
-                <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
                 <EpisodeRoomList user={user}/>
+              </>}
+            />
+            <Route
+              path={"/episode_rooms/:id"}
+              element={<>
+                <EpisodeRoom/>
               </>}
             />
           </Routes>

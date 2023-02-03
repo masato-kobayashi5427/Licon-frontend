@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 
 export default function AddEpisode(props) {
 	const [title, setTitle] = useState("")
@@ -9,6 +10,13 @@ export default function AddEpisode(props) {
 	const [limit, setLimit] = useState("")
 	const [period, setPeriod] = useState("")
 	const [image, setImage] = useState({data: "", name: ""})
+	const navigate = useNavigate();
+	
+		useEffect(() => {
+			if (props.user === undefined) {navigate('/login')}
+		})
+	;
+
   const handleSubmit = (event) => {
     axios.post("http://localhost:3001/episodes/create",
       {
@@ -48,9 +56,6 @@ export default function AddEpisode(props) {
 			console.log(files[0])
 		}
 	}
-
-
-
 	return (
 		<div>
 			<form onSubmit={handleSubmit} className="form" >

@@ -12,6 +12,7 @@ export default function EpisodeRoomList(props) {
   const [episode_rooms, setEpisodeRooms] = useState([])
 
   useEffect(() => {
+    if (props.user.id !== undefined) {
     axios.get("http://localhost:3001/episode_rooms")
     .then(resp => {
       console.log(resp.data[0]);
@@ -19,15 +20,15 @@ export default function EpisodeRoomList(props) {
     })
     .catch(e => {
       console.log(e);
-    })
+    })}
   }, [])
 
-  return (
-    <>
-      <h1>EpisodeRoom List</h1>
-      <div>
+  const RoomList = (userCheck) => {
+    if (userCheck !== undefined) {
+      return (
+        <div>
         {episode_rooms.filter(episode_room => {
-          return episode_room.id !== props.user.id
+          return episode_room.user.id !== props.user.id
         }).map((val, key) => {
           return(
         <li key={key}>
@@ -38,6 +39,18 @@ export default function EpisodeRoomList(props) {
           </Link>
         </li>
         )})}
+        </div>
+      )}
+    else {
+      return (<div>ログインしてください</div>)
+    }
+  }
+
+  return (
+    <>
+      <h1>EpisodeRoom List</h1>
+      <div>
+        {RoomList(props.user.id)}
       </div>
     </>
   )
