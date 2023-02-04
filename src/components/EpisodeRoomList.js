@@ -12,6 +12,7 @@ export default function EpisodeRoomList(props) {
   const [episode_rooms, setEpisodeRooms] = useState([])
 
   useEffect(() => {
+    if (props.user.id !== undefined) {
     axios.get("http://localhost:3001/episode_rooms")
     .then(resp => {
       console.log(resp.data[0]);
@@ -19,21 +20,37 @@ export default function EpisodeRoomList(props) {
     })
     .catch(e => {
       console.log(e);
-    })
+    })}
   }, [])
+
+  const RoomList = (userCheck) => {
+    if (userCheck !== undefined) {
+      return (
+        <div>
+        {episode_rooms.filter(episode_room => {
+          return episode_room.user.id !== props.user.id
+        }).map((val, key) => {
+          return(
+        <li key={key}>
+          <Link to={"/episode_rooms/" + val.id} state={ val.id } >
+            <div>{val.episode_room.name}</div>
+            <div>{val.user.nickname}</div>
+            <ImageContent src={val.episode_room.episode.image_url} alt="画像"></ImageContent>
+          </Link>
+        </li>
+        )})}
+        </div>
+      )}
+    else {
+      return (<div>ログインしてください</div>)
+    }
+  }
 
   return (
     <>
       <h1>EpisodeRoom List</h1>
       <div>
-        {episode_rooms.map((val, key) => {
-          return(
-        <li key={key}>
-          <div>{val.episode_room.name}</div>
-          <div>{val.user.nickname}</div>
-          <ImageContent src={val.episode_room.episode.image_url} alt="画像"></ImageContent>
-        </li>
-        )})}
+        {RoomList(props.user.id)}
       </div>
     </>
   )

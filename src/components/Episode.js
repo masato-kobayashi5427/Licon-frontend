@@ -31,7 +31,7 @@ export default function Episode() {
   const [searchName, setSearchName] = useState('')
 
   useEffect(() => {
-    axios.get("http://localhost:3001/episodes")
+    axios.get("http://localhost:3001/episodes", { withCredentials: true })
     .then(resp => {
       console.log(resp.data);
       setEpisodes(resp.data);
