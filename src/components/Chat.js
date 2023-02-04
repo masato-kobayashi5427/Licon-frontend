@@ -1,27 +1,28 @@
 import { useState, useMemo, useEffect } from 'react';
 import ActionCable from 'actioncable';
 
-export default function Cable() {
+export default function Chat(props) {
   const [receivedMessage, setReceivedMessage] = useState();
   const [text, setText] = useState('');
   const [input, setInput] = useState('');
   const [subscription, setSubscription] = useState();
+
   // Action Cableに接続
-  const cable = useMemo(() => ActionCable.createConsumer('http://localhost:3001/cable'), []);
+  const cable = useMemo(() => ActionCable.createConsumer('http://localhost:3001/cable', { withCredentials: true }), []);
 
   useEffect(() => {
     // ChatChannelをサブスクライブ
     // receivedにメッセージを受信した時のメソッドを設定します。
     // 今回はreceivedMessageにメッセージをセットします。
-    const sub = cable.subscriptions.create({ channel: "ChatChannel" }, {
+    const sub = cable.subscriptions.create({ channel: "ChatChannel", room_id: props.episode_room_id }, {
       received: (msg) => setReceivedMessage(msg)
     });
-    console.log(sub);
     setSubscription(sub);
   }, [cable]);
 
   const handleSend = () => {
     // inputをサーバーに送信
+    // chat_channel.rbのchatメソッドに送信
     subscription?.perform('chat', { body: input });
     setInput('');
   };
@@ -29,7 +30,6 @@ export default function Cable() {
   useEffect(() => {
     console.log(receivedMessage);
     if (!receivedMessage) return;
-    console.log(receivedMessage);
     const { sender, body } = receivedMessage;
     setText(text.concat("\n", `${sender}: ${body}`));
   }, [receivedMessage]);
@@ -46,6 +46,7 @@ export default function Cable() {
   return (
     <div>
       <div>
+        {text}
         <textarea id="history" readOnly style={{ width: "500px", height: "200px" }} value={text} />
       </div>
       <div>

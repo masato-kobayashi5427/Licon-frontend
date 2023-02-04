@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
-import { useNavigate, useLocation } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import axios from 'axios'
 
 export default function AddEpisodeRoom(props) {
   const [name, setName] = useState("")
-  const navigate = useNavigate
   const location = useLocation();
   const handleSubmit = (event) => {
     axios.post("http://localhost:3001/episode_rooms",
