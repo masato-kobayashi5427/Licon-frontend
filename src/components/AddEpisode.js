@@ -37,7 +37,7 @@ export default function AddEpisode(props) {
           props.handleSuccessfulAuthentication(response.data)
       }
     }).catch(error => {
-        console.log("registration error", error)
+        console.log("create episode error", error)
     })
     event.preventDefault()
 	}
