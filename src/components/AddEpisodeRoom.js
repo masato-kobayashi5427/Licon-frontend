@@ -16,10 +16,7 @@ export default function AddEpisodeRoom(props) {
     },
     { withCredentials: true }
     ).then(response => {
-      console.log('response')
-      if (response.data.status === 'created') {
-          props.handleSuccessfulAuthentication(response.data)
-      }
+      console.log(response)
     }).catch(error => {
         console.log("create room error", error)
     })

@@ -114,7 +114,7 @@ export default function App(props) {
             <Route
               path={"/episode_rooms/:id"}
               element={<>
-                <EpisodeRoom/>
+                <EpisodeRoom user_id={user.id}/>
               </>}
             />
           </Routes>

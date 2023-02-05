@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { useLocation } from "react-router-dom";
 import Chat from './Chat'
 
@@ -13,7 +13,7 @@ export default function EpisodeRoom(props) {
         <div>
           表示
         </div>
-      <Chat episode_room_id={episode_room_id}/>
+      <Chat episode_room_id={episode_room_id} user_id={props.user_id}/>
     </>
   )
 }
