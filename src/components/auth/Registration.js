@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import styled from 'styled-components'
+import background from "../../images/木目.png";
 
 export default function Registration(props) {
 	const [nickname, setNickname] = useState("")
@@ -12,6 +14,14 @@ export default function Registration(props) {
 	const [first_name_kana, setFirst_name_kana] = useState("")
 	const [birth_day, setBirth_day] = useState("")
 	const [introduction, setIntroduction] = useState("")
+
+	const Background = styled.div`
+	height: 100%;
+	width: 100vw;
+	display: flex;
+  align-items: center;
+  flex-direction: column;
+`
 
   const handleSubmit = (event) => {
     axios.post("http://localhost:3001/signup",
@@ -42,8 +52,7 @@ export default function Registration(props) {
 	}
 
 	return (
-		<div>
-			
+		<Background style={{ backgroundImage: `url(${background})` }}>
 			{/* onSubmit、onChangeイベントを追加 */}
 			<form onSubmit={handleSubmit} className="form" >
 				<div className='form-main'>
@@ -131,6 +140,6 @@ export default function Registration(props) {
 					<button type="submit" className='btn'>登録</button>
 				</div>
 			</form>
-		</div>
+		</Background>
 	)
 }

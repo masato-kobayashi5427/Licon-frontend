@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
+import styled from 'styled-components'
 import axios from 'axios'
+
+import { AnimatePresence } from "framer-motion"
 import Top from './components/Top'
 import Registration from './components/auth/Registration'
 import Login from './components/auth/Login'
@@ -12,14 +15,21 @@ import EpisodeRoomList from './components/EpisodeRoomList'
 import EpisodeRoom from './components/EpisodeRoom'
 import './App.css'
 
+const AppView = styled.div`
+  height: 100vh;
+  width: 100vw;
+`
+
 export default function App(props) {
 // useState
   const [loggedInStatus, setLoggedInStatus] = useState("未ログイン")
   const [user, setUser] = useState({})
 
+  const location = useLocation();
+
   const handleSuccessfulAuthentication = (data) => {
     handleLogin(data)
-  }
+  };
 // ログイン状態切り替え時のレンダリング
   const handleLogin = (data) => {
     setLoggedInStatus("ログイン中")
@@ -28,7 +38,7 @@ export default function App(props) {
 // ログイン表示の切り替え
   useEffect(() => {
     checkLoginStatus()
-  })
+  },[props])
 
   // ログイン有無の確認
   const checkLoginStatus = () => {
@@ -36,9 +46,9 @@ export default function App(props) {
     .then(response => {
       console.log(response)
       if (response.data.logged_in && loggedInStatus === "未ログイン") {
-        setLoggedInStatus("ログインなう")
+        setLoggedInStatus("ログイン中")
         setUser(response.data.user)
-      } else if (!response.data.logged_in && loggedInStatus === "ログインなう") {
+      } else if (!response.data.logged_in && loggedInStatus === "ログイン中") {
         setLoggedInStatus("未ログイン")
         setUser({})
       }
@@ -62,64 +72,64 @@ export default function App(props) {
     setLoggedInStatus("未ログイン")
     setUser({})
   }
-
+  
   return (
-    <div>
-      <BrowserRouter>
-        <>
-        <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
-          <Routes>
-            <Route
-              path={"/episodes"}
-              element={<>
-                <Episode user={user}  />
-              </>}
-            />
-            <Route
-              path={"/episodes/new"}
-              element={<>
-                <AddEpisode user={user}/>
-              </>}
-            />
-            <Route
-              path={"/registration"}
-              element={<>
-                <Registration handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
-              </>}
-            />
-            <Route
-              path={"/login"}
-              element={<>
-                <Login handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
-              </>}
-            />
-            <Route
-              path={"/episodes/:id"}
-              element={<>
-                <DetailEpisode />
-              </>}
-            />
-            <Route
-              path={"/episode_rooms/new"}
-              element={<>
-                <AddEpisodeRoom user={user} />
-              </>}
-            />
-            <Route
-              path={"/episode_rooms"}
-              element={<>
-                <EpisodeRoomList user={user}/>
-              </>}
-            />
-            <Route
-              path={"/episode_rooms/:id"}
-              element={<>
-                <EpisodeRoom user_id={user.id}/>
-              </>}
-            />
-          </Routes>
-        </>
-      </BrowserRouter>
-    </div>
+    <AppView>
+      <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
+      <div className="App">
+      <AnimatePresence>
+      <Routes location={location} key={location.pathname}>
+        <Route
+          path={"/episodes"}
+          element={<>
+            <Episode user={user}  />
+          </>}
+        />
+        <Route
+          path={"/episodes/new"}
+          element={<>
+            <AddEpisode user={user}/>
+          </>}
+        />
+        <Route
+          path={"/registration"}
+          element={<>
+            <Registration handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
+          </>}
+        />
+        <Route
+          path={"/login"}
+          element={<>
+            <Login handleSuccessfulAuthentication={handleSuccessfulAuthentication} />
+          </>}
+        />
+        <Route
+          path={"/episodes/:id"}
+          element={<>
+            <DetailEpisode />
+          </>}
+        />
+        <Route
+          path={"/episode_rooms/new"}
+          element={<>
+            <AddEpisodeRoom user={user} />
+          </>}
+        />
+        <Route
+          path={"/episode_rooms"}
+          element={<>
+            <EpisodeRoomList user={user}/>
+          </>}
+        />
+        <Route
+          path={"/episode_rooms/:id"}
+          element={<>
+            <EpisodeRoom user_id={user.id}/>
+          </>}
+        />
+      </Routes>
+      </AnimatePresence>
+      </div>
+    </AppView>
   )
 }

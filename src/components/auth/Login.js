@@ -1,6 +1,16 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import styled from 'styled-components'
 import { useNavigate } from "react-router-dom";
+import background from "../../images/木目.png";
+
+const Background = styled.div`
+	height: 100%;
+	width: 100vw;
+	display: flex;
+  align-items: center;
+  flex-direction: column;
+`
 
 export default function Login(props) {
   const [email, setEmail] = useState("")
@@ -29,7 +39,7 @@ export default function Login(props) {
 
 
   return (
-    <div>
+    <Background style={{ backgroundImage: `url(${background})` }}>
       <form onSubmit={handleSubmit} className="form">
         <div className='form-main'>
           <p>ログイン</p>
@@ -52,6 +62,6 @@ export default function Login(props) {
           <button type="submit" className='btn'>ログイン</button>
         </div>
       </form>
-    </div>
+    </Background>
   )
 }

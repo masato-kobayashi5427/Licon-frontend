@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
+import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
+import background from "../images/木目.png";
+
+const Background = styled.div`
+	height: 100%;
+	width: 100vw;
+	display: flex;
+  align-items: center;
+  flex-direction: column;
+`
 
 export default function AddEpisode(props) {
 	const [title, setTitle] = useState("")
@@ -57,7 +67,7 @@ export default function AddEpisode(props) {
 		}
 	}
 	return (
-		<div>
+		<Background style={{ backgroundImage: `url(${background})` }}>
 			<form onSubmit={handleSubmit} className="form" >
 				<div className='form-main'>
 				<p>新規登録</p>
@@ -114,6 +124,6 @@ export default function AddEpisode(props) {
 					<button type="submit" className='btn'>登録</button>
 				</div>
 			</form>
-		</div>
+		</Background>
 	)
 }

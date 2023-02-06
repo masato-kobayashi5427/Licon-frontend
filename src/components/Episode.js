@@ -1,30 +1,63 @@
-import React, { useState, useEffect } from 'react'
+import {React, useState, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import { motion } from 'framer-motion'
+
+const EpisodeList = styled.h1`
+  margin: 7px 14px;
+`
 
 const SearchForm = styled.input`
   font-size: 20px;
   width: 80%;
   height: 40px;
-  margin: 10px 0;
+  margin: 7px 14px;
   padding: 10px;
 `
 
 const List = styled.div`
-  margin: 7px auto;
+  margin: 7px 14px;
   padding: 10px;
-  font-size: 25px;
+  font-size:  16px;
 `
-
 const EpisodeContent = styled.div`
-  font-size: 24px;
+  height: 120px;
+  width: 90vw;
+  display: flex;
+  border: 2px solid black;
+`
+const ImageBox = styled.div`
+  height: 100%;
+  width: 120px;
+  background-color: #e0e0e0;
+  display: flex;
+  justify-content: center;
 `
 
 const ImageContent = styled.img`
-  height: 30vh;
-  width: 30vw;
+  width:auto;
+  height:auto;
+  max-width:100%;
+  max-height:100%;
+  transition: 0.5s;
+  margin: auto;
+  transform-origin: 50% 50%;
+  &:hover { 
+    transform: scale(1.2) 
+  }
 `
+const EpisodeText = styled.div`
+  height: 100%;
+  width: calc(90vw - 120px);
+  padding-left: 15px;
+`
+
+const EpisodeTitle = styled.div`
+  font-size: 24px;
+`
+
+
 
 export default function Episode() {
   const [episodes, setEpisodes] = useState([])
@@ -44,7 +77,7 @@ export default function Episode() {
 
   return (
     <>
-      <h1>Episode List</h1>
+      <EpisodeList>Episode List</EpisodeList>
       <div>
         <SearchForm
           type="text"
@@ -55,7 +88,7 @@ export default function Episode() {
         />
       </div>
 
-      <div>
+      <div >
         {episodes.filter((val) => {
           if(searchName === "") {
             return val
@@ -64,14 +97,26 @@ export default function Episode() {
           }
         }).map((val, key) => {
           return(
-            <Link to={"/episodes/" + val.id} className='nav-item'>
+            <motion.div whileInView={{ scale: [0.6, 1.1, 1.0] }}
+            transition={{
+              duration: 1.0,
+              delay: 0.1 }}>
+              
+            <Link to={"/episodes/" + val.id} className="episode-link" >
             <List key={key}>
-              <ImageContent src={val.image_url} alt="画像" className="image-content"></ImageContent>
-              <EpisodeContent>{val.title}</EpisodeContent>
-              <div>{val.explain}</div>
-              <div>{val.user.nickname}</div>
+              <EpisodeContent>
+                <ImageBox>
+                  <ImageContent src={val.image_url} alt="画像"></ImageContent>
+                </ImageBox>
+                <EpisodeText>
+                  <EpisodeTitle>{val.title}</EpisodeTitle>
+                  <div>{val.explain}</div>
+                  <div>{val.user.nickname}</div>
+                </EpisodeText>
+              </EpisodeContent>
             </List>
             </Link>
+            </motion.div>
           )
         })}
       </div>
