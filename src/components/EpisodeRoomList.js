@@ -50,8 +50,8 @@ export default function EpisodeRoomList(props) {
         <div>
         {episode_rooms.map((val, key) => {
           return(
-            <Link to={"/episode_rooms/" + val.id} state={ val.id } >
-            <List key={key}>
+            <Link to={"/episode_rooms/" + val.id} state={ val.id } key={key} >
+            <List >
               <EpisodeContent>
                 <div>
                   <ImageContent src={val.episode_room.episode.image_url} alt="画像"></ImageContent>

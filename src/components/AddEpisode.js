@@ -28,7 +28,7 @@ export default function AddEpisode(props) {
 	;
 
   const handleSubmit = (event) => {
-    axios.post("http://localhost:3001/episodes/create",
+    axios.post("http://localhost:3001/episodes",
       {
         episode: {
 				title: title,
@@ -42,10 +42,11 @@ export default function AddEpisode(props) {
     },
     { withCredentials: true }
     ).then(response => {
-			console.log('response')
-      if (response.data.status === 'created') {
-          props.handleSuccessfulAuthentication(response.data)
-      }
+			console.log(response.data.image_url)
+			navigate("/episodes")
+      // if (response.data.status === 'created') {
+      //     props.handleSuccessfulAuthentication(response.data)
+      // }
     }).catch(error => {
         console.log("create episode error", error)
     })

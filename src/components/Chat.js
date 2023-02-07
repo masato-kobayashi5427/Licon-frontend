@@ -3,6 +3,10 @@ import axios from 'axios'
 import styled from 'styled-components'
 import ActionCable from 'actioncable';
 
+const TextArea = styled.textarea`
+border: none;
+`
+
 export default function Chat(props) {
   const [receivedMessage, setReceivedMessage] = useState();
   const [text, setText] = useState('');
@@ -58,8 +62,8 @@ export default function Chat(props) {
   const ChatList = (chats) => {
     return (
       <>
-      {chats.map((val) => {
-        return(<div>{val.user.nickname}: {val.content}</div>)
+      {chats.map((val, key) => {
+        return(<div key={key}>{val.user.nickname}: {val.content}</div>)
       })}
       </>
   )};
@@ -85,9 +89,7 @@ export default function Chat(props) {
     })
   };
 
-  const TextArea = styled.textarea`
-    border: none;
-  `
+
 
   return (
     <div>

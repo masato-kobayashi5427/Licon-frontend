@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
 
 const EpisodeList = styled.h1`
-  margin: 7px 14px;
+  margin: 4px 14px;
 `
 
 const SearchForm = styled.input`
@@ -97,13 +97,13 @@ export default function Episode() {
           }
         }).map((val, key) => {
           return(
-            <motion.div whileInView={{ scale: [0.6, 1.1, 1.0] }}
+            <motion.div whileInView={{ scale: [0.7, 1.05, 1.0] }}
             transition={{
               duration: 1.0,
-              delay: 0.1 }}>
-              
+              delay: 0 }}
+              key={key}>
             <Link to={"/episodes/" + val.id} className="episode-link" >
-            <List key={key}>
+            <List >
               <EpisodeContent>
                 <ImageBox>
                   <ImageContent src={val.image_url} alt="画像"></ImageContent>
