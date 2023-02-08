@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, createContext } from 'react'
 import { Route, Routes, useLocation } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -14,6 +14,8 @@ import AddEpisodeRoom from './components/AddEpisodeRoom'
 import EpisodeRoomList from './components/EpisodeRoomList'
 import EpisodeRoom from './components/EpisodeRoom'
 import './App.css'
+
+export const UserData = createContext();
 
 const AppView = styled.div`
   height: 100vh;
@@ -73,8 +75,9 @@ export default function App(props) {
     setUser({})
   }
   
-  return (
+  return (  
     <AppView>
+      <UserData.Provider value={user}>
       <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
       <div className="App">
       <AnimatePresence>
@@ -130,6 +133,7 @@ export default function App(props) {
       </Routes>
       </AnimatePresence>
       </div>
+      </UserData.Provider>
     </AppView>
   )
 }
