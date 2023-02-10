@@ -1,23 +1,127 @@
-import { useState, useMemo, useEffect } from 'react';
+import { useState, useMemo, useEffect, useContext, useRef, useLayoutEffect  } from 'react';
 import axios from 'axios'
 import styled from 'styled-components'
 import ActionCable from 'actioncable';
+import { UserData} from '../App'
 
-const TextArea = styled.textarea`
-border: none;
+const ChatBackground =styled.div`
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+const ChatArea = styled.div`
+  width: 1000px;
+  display: flex;
+  flex-flow: column;
+  background: #769ece;
+  border: 1px solid #000;
+  overflow-y: scroll;
+  padding-bottom: 10px;
+  `
+
+const HomeChat = styled.div`
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`
+
+const AwayChat = styled.div`
+  height: auto;
+  width: 100vw;
+  display: flex;
+`
+
+const ImageBox = styled.div`
+  height:200px;
+  width:200px;
+`
+
+const HomeImageContent = styled.img`
+  width:200px;
+  height:200px;
+  transition: 0.5s;
+  transform-origin: 100% 60%;
+  &:hover { 
+    transform: scale(2) 
+  }
+`
+const AwayImageContent = styled.img`
+  width:200px;
+  height:200px;
+  transition: 0.5s;
+  transform-origin: 0% 60%;
+  &:hover { 
+    transform: scale(2) 
+  }
+`
+
+const AwayChatBox = styled.div`
+  position: relative;
+  display: inline-block;
+  max-width: 192px;
+  margin: 8px 0 0;
+  padding: 9px 14px;
+  border-radius: 19px;
+  overflow-wrap: break-word;
+  clear: both;
+  box-sizing: content-box;
+  float: left;
+  margin-left: 62px;
+  background: white;
+  &:before {
+    position: absolute;
+    content: "";
+    width: 24px;
+    height: 36px;
+    top: -21px;
+    left: -10px;
+    border-radius: 18px 0 6px 18px/18px 0 1px 18px;
+    box-shadow: -3px -15px 0 -5px white inset;
+  }
+`
+const HomeChatBox = styled.div`
+  position: relative;
+  display: inline-block;
+  max-width: 192px;
+  margin: 8px 0 0;
+  padding: 9px 14px;
+  border-radius: 19px;
+  overflow-wrap: break-word;
+  clear: both;
+  box-sizing: content-box;
+  float: right;
+  margin-right: 12px;
+  background: #7adc40;
+  &:before{
+    position: absolute;
+    content: "";
+    width: 24px;
+    height: 36px;
+    top: -21px;
+    right: -10px;
+    border-radius: 0 18px 18px 6px/0 18px 18px 1px;
+    box-shadow: inset 3px -15px 0 -5px #7adc40;
+  }
 `
 
 export default function Chat(props) {
   const [receivedMessage, setReceivedMessage] = useState();
-  const [text, setText] = useState('');
+  const [text, setText] = useState();
   const [input, setInput] = useState('');
   const [subscription, setSubscription] = useState();
   const [chats, setChats] = useState([]);
+  const [image, setImage] = useState({data: "", name: ""})
+
+  const userData =useContext(UserData);
+  const ref = useRef();
 
   // Action Cableに接続
   const cable = useMemo(() => ActionCable.createConsumer('http://localhost:3001/cable', { withCredentials: true }), []);
 
   useEffect(() => {
+    console.log(cable)
     // ChatChannelをサブスクライブ
     // receivedにメッセージを受信した時のメソッドを設定します。
     // 今回はreceivedMessageにメッセージをセットします。
@@ -27,20 +131,39 @@ export default function Chat(props) {
     setSubscription(sub);
   }, [cable]);
 
-
+// チャットHTMLの挿入
   useEffect(() => {
     if (!receivedMessage) return;
+    console.log(receivedMessage)
     const { sender, body } = receivedMessage;
-    setText(text.concat("\n", `${sender}: ${body}`));
+    if (receivedMessage.sender === userData.nickname) {
+      if (body.includes('http://')) {
+        setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
+      } 
+      else {
+        setText([text, <HomeChat id="history"><HomeChatBox id="chat">{sender}:{body}</HomeChatBox></HomeChat>]);
+      }
+    }
+    else {
+      if (body.includes('http://')) {
+        setText([text, <AwayChat id="history"><AwayImageContent src={body} alt="画像"></AwayImageContent></AwayChat>]);
+      } 
+      else {
+        setText([text, <AwayChat id="history"><AwayChatBox id="chat">{sender}:{body}</AwayChatBox></AwayChat>]);
+      }
+    }
     console.log(text)
   }, [receivedMessage]);
-
+  
+// 最新のチャットまでスクロール
   useEffect(() => {
     console.log(text)
-    const history = document.getElementById('history');
-    history?.scrollTo(0, history.scrollHeight);
+    ref?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }, [text]);
 
+// チャット履歴を取得
   useEffect(() => {
     axios.get(`http://localhost:3001/episode_rooms/${props.episode_room_id}/chats`, { withCredentials: true })
     .then(resp => {
@@ -52,18 +175,30 @@ export default function Chat(props) {
     })
   }, [props.episode_room_id])
 
+// チャット履歴を表示
   useEffect(() => {
     if (!chats) return;
-    console.log(chats)
-    ChatList(chats)
-    console.log(props.episode_room_id)
+    ChatList(chats, props.user_id)
   }, [chats]);
-
+  
+// チャットを並べる
   const ChatList = (chats) => {
     return (
       <>
+      
       {chats.map((val, key) => {
-        return(<div key={key}>{val.user.nickname}: {val.content}</div>)
+        if ((val.image_url === null) && (val.user_id === userData.id)) {
+          return(<HomeChat id="home"><HomeChatBox key={key}>{val.user.nickname}: {val.content}</HomeChatBox></HomeChat>)
+        } 
+        else if ((val.image_url !==  null) && (val.user_id === userData.id)) {
+          return(<HomeChat><ImageBox><HomeImageContent src={val.image_url} alt="画像"></HomeImageContent></ImageBox></HomeChat>)
+        }
+        else if ((val.image_url === null) && (val.user_id !== userData.id)) {
+          return(<AwayChat id="away"><AwayChatBox key={key}>{val.user.nickname}: {val.content}</AwayChatBox></AwayChat>)
+        }
+        else {
+          return(<AwayChat><ImageBox><AwayImageContent src={val.image_url} alt="画像"></AwayImageContent></ImageBox></AwayChat>)
+        }
       })}
       </>
   )};
@@ -71,7 +206,6 @@ export default function Chat(props) {
   const handleSend = (event) => {
     // inputをサーバーに送信
     // chat_channel.rbのchatメソッドに送信
-    subscription?.perform('chat', { body: input });
     axios.post(`http://localhost:3001/episode_rooms/${props.episode_room_id}/chats`,
     {
       chat: {
@@ -81,37 +215,76 @@ export default function Chat(props) {
     },
     { withCredentials: true }
     ).then(response => {
-      console.log(response)
-      event.preventDefault()
-      setInput('');
+      subscription?.perform('chat', { body: input });
+      setInput("")
     }).catch(error => {
-        console.log("create episode error", error)
+      console.log("create episode error", error)
     })
   };
 
+  // 画像投稿機能
+  const handleImageSelect = (e) => {
+		const reader = new FileReader()
+		const files = (e.target ).files
+		if (files) {
+			reader.onload = () => {
+				setImage({
+					data: reader.result ,
+					name: files[0] ? files[0].name : "unknownfile"
+				})
+			}
+			reader.readAsDataURL(files[0])
+			console.log(files[0])
+		}
+	}
+
+  const handleSubmit = (event) => {
+    axios.post(`http://localhost:3001/episode_rooms/${props.episode_room_id}/chats`,
+      {
+        chat: {
+				image: image,
+        episode_room_id: props.episode_room_id
+      }
+    },
+    { withCredentials: true }
+    ).then(response => {
+      console.log(response)
+			console.log(response.data.chat.image_url)
+      subscription?.perform('chat', { body: response.data.chat.image_url });
+    }).catch(error => {
+        console.log("create chat error", error)
+    })
+    event.preventDefault()
+	}
 
 
   return (
     <div>
-      <div id="history">
+      <ChatBackground id="backgound"><ChatArea>
         {ChatList(chats)}
-        <TextArea readOnly value={text} />
-      </div>
+        {text}
+        <div ref={ref}></div>
+        </ChatArea></ChatBackground>
       <div>
         <input
           type="text"
           onKeyDown={(event) => {
             if (event.key === 'Enter') {
-              event.preventDefault();
               handleSend();
             }
           }}
+          value={input}
           style={{ width: "400px", marginRight: "10px" }}
           onChange={event => setInput(event.currentTarget.value)}
         />
         <button onClick={handleSend} disabled={input === ''}>
           send
         </button>
+        {/* 画像投稿機能 */}
+        <form onSubmit={handleSubmit} className="form" >
+          <input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
+					<button type="submit" className='btn'>画像投稿</button>
+        </form>
       </div>
     </div >
   );

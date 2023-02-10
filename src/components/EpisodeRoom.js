@@ -1,6 +1,11 @@
-import React from 'react'
+import { React } from 'react'
 import { useLocation } from "react-router-dom";
+import styled from 'styled-components'
 import Chat from './Chat'
+
+const ChatSpace = styled.div`
+  width: 100%;
+`
 
 
 export default function EpisodeRoom(props) {
@@ -9,11 +14,10 @@ export default function EpisodeRoom(props) {
 
   return (
     <>
-      <h1>EpisodeRoom</h1>
-        <div>
-          表示
-        </div>
-      <Chat episode_room_id={episode_room_id} user_id={props.user_id}/>
+      <ChatSpace>
+        <h1>EpisodeRoom</h1>
+        <Chat episode_room_id={episode_room_id} user_id={props.user_id}/>
+      </ChatSpace>
     </>
   )
 }

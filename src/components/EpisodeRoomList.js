@@ -36,7 +36,7 @@ export default function EpisodeRoomList(props) {
   useEffect(() => {
     axios.get("http://localhost:3001/episode_rooms", { withCredentials: true })
     .then(resp => {
-      console.log(resp.data[0]);
+      console.log(resp.data);
       setEpisodeRooms(resp.data);
     })
     .catch(e => {
@@ -49,8 +49,9 @@ export default function EpisodeRoomList(props) {
       return (
         <div>
         {episode_rooms.map((val, key) => {
+          console.log(val)
           return(
-            <Link to={"/episode_rooms/" + val.id} state={ val.id } key={key} >
+            <Link to={"/episode_rooms/" + val.episode_room_id} state={ val.episode_room_id } key={key} >
             <List >
               <EpisodeContent>
                 <div>
