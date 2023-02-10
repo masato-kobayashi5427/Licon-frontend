@@ -57,8 +57,6 @@ const EpisodeTitle = styled.div`
   font-size: 24px;
 `
 
-
-
 export default function Episode() {
   const [episodes, setEpisodes] = useState([])
   const [searchName, setSearchName] = useState('')

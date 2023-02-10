@@ -1,43 +1,109 @@
-import { useState, useMemo, useEffect, useContext } from 'react';
+import { useState, useMemo, useEffect, useContext, useRef, useLayoutEffect  } from 'react';
 import axios from 'axios'
 import styled from 'styled-components'
 import ActionCable from 'actioncable';
 import { UserData} from '../App'
 
-// const TextArea = styled.textarea`
-// border: none;
-// `
+const ChatBackground =styled.div`
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+`
+const ChatArea = styled.div`
+  width: 1000px;
+  display: flex;
+  flex-flow: column;
+  background: #769ece;
+  border: 1px solid #000;
+  overflow-y: scroll;
+  padding-bottom: 10px;
+  `
 
-const ImageContent = styled.img`
-  width:auto;
-  height:100%;
+const HomeChat = styled.div`
+  height: auto;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+`
+
+const AwayChat = styled.div`
+  height: auto;
+  width: 100vw;
+  display: flex;
+`
+
+const ImageBox = styled.div`
+  height:200px;
+  width:200px;
+`
+
+const HomeImageContent = styled.img`
+  width:200px;
+  height:200px;
   transition: 0.5s;
-  margin: auto;
-  transform-origin: 0% 0%;
+  transform-origin: 100% 60%;
+  &:hover { 
+    transform: scale(2) 
+  }
+`
+const AwayImageContent = styled.img`
+  width:200px;
+  height:200px;
+  transition: 0.5s;
+  transform-origin: 0% 60%;
   &:hover { 
     transform: scale(2) 
   }
 `
 
-const ImageBox = styled.div`
-  height: 200px;
-  width: 200px;
-  padding-top: 20px
-  background-color: #e0e0e0;
+const AwayChatBox = styled.div`
+  position: relative;
+  display: inline-block;
+  max-width: 192px;
+  margin: 8px 0 0;
+  padding: 9px 14px;
+  border-radius: 19px;
+  overflow-wrap: break-word;
+  clear: both;
+  box-sizing: content-box;
+  float: left;
+  margin-left: 62px;
+  background: white;
+  &:before {
+    position: absolute;
+    content: "";
+    width: 24px;
+    height: 36px;
+    top: -21px;
+    left: -10px;
+    border-radius: 18px 0 6px 18px/18px 0 1px 18px;
+    box-shadow: -3px -15px 0 -5px white inset;
+  }
 `
-
-const UserChat = styled.div`
-  height: auto;
-  width: 100vw;
-  display: flex;
+const HomeChatBox = styled.div`
+  position: relative;
+  display: inline-block;
+  max-width: 192px;
+  margin: 8px 0 0;
+  padding: 9px 14px;
+  border-radius: 19px;
+  overflow-wrap: break-word;
+  clear: both;
+  box-sizing: content-box;
   float: right;
-`
-
-const AnotherChat = styled.div`
-  height: auto;
-  width: 100vw;
-  display: flex;
-  : right;
+  margin-right: 12px;
+  background: #7adc40;
+  &:before{
+    position: absolute;
+    content: "";
+    width: 24px;
+    height: 36px;
+    top: -21px;
+    right: -10px;
+    border-radius: 0 18px 18px 6px/0 18px 18px 1px;
+    box-shadow: inset 3px -15px 0 -5px #7adc40;
+  }
 `
 
 export default function Chat(props) {
@@ -49,11 +115,13 @@ export default function Chat(props) {
   const [image, setImage] = useState({data: "", name: ""})
 
   const userData =useContext(UserData);
+  const ref = useRef();
 
   // Action Cableに接続
   const cable = useMemo(() => ActionCable.createConsumer('http://localhost:3001/cable', { withCredentials: true }), []);
 
   useEffect(() => {
+    console.log(cable)
     // ChatChannelをサブスクライブ
     // receivedにメッセージを受信した時のメソッドを設定します。
     // 今回はreceivedMessageにメッセージをセットします。
@@ -68,21 +136,31 @@ export default function Chat(props) {
     if (!receivedMessage) return;
     console.log(receivedMessage)
     const { sender, body } = receivedMessage;
-    if (body.includes('http://')) {
-      setText([text, <ImageBox><ImageContent src={body} alt="画像"></ImageContent></ImageBox>]);
-    } 
-    else {
-      setText([text, <div id="chat">{sender}:{body}</div>]);
+    if (receivedMessage.sender === userData.nickname) {
+      if (body.includes('http://')) {
+        setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
+      } 
+      else {
+        setText([text, <HomeChat id="history"><HomeChatBox id="chat">{sender}:{body}</HomeChatBox></HomeChat>]);
+      }
     }
-
+    else {
+      if (body.includes('http://')) {
+        setText([text, <AwayChat id="history"><AwayImageContent src={body} alt="画像"></AwayImageContent></AwayChat>]);
+      } 
+      else {
+        setText([text, <AwayChat id="history"><AwayChatBox id="chat">{sender}:{body}</AwayChatBox></AwayChat>]);
+      }
+    }
     console.log(text)
   }, [receivedMessage]);
   
 // 最新のチャットまでスクロール
   useEffect(() => {
     console.log(text)
-    const history = document.getElementById('history');
-    history?.scrollTo(0, history.scrollHeight);
+    ref?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }, [text]);
 
 // チャット履歴を取得
@@ -101,25 +179,25 @@ export default function Chat(props) {
   useEffect(() => {
     if (!chats) return;
     ChatList(chats, props.user_id)
-    console.log(userData)
   }, [chats]);
   
 // チャットを並べる
-  const ChatList = (chats, user_id) => {
+  const ChatList = (chats) => {
     return (
       <>
+      
       {chats.map((val, key) => {
-        if ((val.image_url == null) && (val.user.id === userData.id)) {
-          return(<UserChat><div key={key}>{val.user.nickname}: {val.content}</div></UserChat>)
+        if ((val.image_url === null) && (val.user_id === userData.id)) {
+          return(<HomeChat id="home"><HomeChatBox key={key}>{val.user.nickname}: {val.content}</HomeChatBox></HomeChat>)
         } 
-        else if (val.image_url === !null && val.user.id === user_id) {
-          return(<UserChat><ImageBox><ImageContent src={val.image_url} alt="画像"></ImageContent></ImageBox></UserChat>)
+        else if ((val.image_url !==  null) && (val.user_id === userData.id)) {
+          return(<HomeChat><ImageBox><HomeImageContent src={val.image_url} alt="画像"></HomeImageContent></ImageBox></HomeChat>)
         }
-        else if (val.image_url === null && val.user.id === !user_id) {
-          return(<AnotherChat><div key={key}>{val.user.nickname}: {val.content}</div></AnotherChat>)
+        else if ((val.image_url === null) && (val.user_id !== userData.id)) {
+          return(<AwayChat id="away"><AwayChatBox key={key}>{val.user.nickname}: {val.content}</AwayChatBox></AwayChat>)
         }
         else {
-          return(<AnotherChat><ImageBox><ImageContent src={val.image_url} alt="画像"></ImageContent></ImageBox></AnotherChat>)
+          return(<AwayChat><ImageBox><AwayImageContent src={val.image_url} alt="画像"></AwayImageContent></ImageBox></AwayChat>)
         }
       })}
       </>
@@ -182,11 +260,11 @@ export default function Chat(props) {
 
   return (
     <div>
-      <div id="history">
+      <ChatBackground id="backgound"><ChatArea>
         {ChatList(chats)}
-        <div id="chatHistory"></div>
         {text}
-      </div>
+        <div ref={ref}></div>
+        </ChatArea></ChatBackground>
       <div>
         <input
           type="text"

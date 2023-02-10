@@ -83,6 +83,12 @@ export default function App(props) {
       <AnimatePresence>
       <Routes location={location} key={location.pathname}>
         <Route
+          path={"/"}
+          element={<>
+            <Episode user={user}  />
+          </>}
+        />
+        <Route
           path={"/episodes"}
           element={<>
             <Episode user={user}  />
