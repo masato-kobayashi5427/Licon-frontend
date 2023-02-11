@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import CategoryList from './CategoryList'
 
 const EpisodeList = styled.h1`
   margin: 4px 14px;
@@ -60,6 +61,7 @@ const EpisodeTitle = styled.div`
 export default function Episode() {
   const [episodes, setEpisodes] = useState([])
   const [searchName, setSearchName] = useState('')
+  const [category, setCategory] = useState('')
 
   useEffect(() => {
     axios.get("http://localhost:3001/episodes", { withCredentials: true })
@@ -85,12 +87,16 @@ export default function Episode() {
           }}
         />
       </div>
-
-      <div >
+      <CategoryList category={category} setCategory={setCategory}/>
+      <div>
         {episodes.filter((val) => {
-          if(searchName === "") {
+          if(searchName === "" && category === "") {
             return val
-          } else if (val.title.toLowerCase().includes(searchName.toLowerCase())) {
+          } else if (val.title.toLowerCase().includes(searchName.toLowerCase()) && category === "") {
+            return val
+          } else if (val.title.toLowerCase().includes(searchName.toLowerCase()) && val.category === category) {
+            return val
+          } else if (searchName === "" && val.category === category) {
             return val
           }
         }).map((val, key) => {

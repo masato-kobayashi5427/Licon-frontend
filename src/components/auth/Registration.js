@@ -1,7 +1,16 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import { useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import background from "../../images/木目.png";
+
+const Background = styled.div`
+	height: 100%;
+	width: 100vw;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+`
 
 export default function Registration(props) {
 	const [nickname, setNickname] = useState("")
@@ -15,13 +24,8 @@ export default function Registration(props) {
 	const [birth_day, setBirth_day] = useState("")
 	const [introduction, setIntroduction] = useState("")
 
-	const Background = styled.div`
-	height: 100%;
-	width: 100vw;
-	display: flex;
-  align-items: center;
-  flex-direction: column;
-`
+	const navigate = useNavigate();
+
 
   const handleSubmit = (event) => {
     axios.post("http://localhost:3001/signup",
@@ -43,7 +47,8 @@ export default function Registration(props) {
     ).then(response => {
 			console.log('response')
       if (response.data.status === 'created') {
-          props.handleSuccessfulAuthentication(response.data)
+				props.handleSuccessfulAuthentication(response.data)
+				navigate("/episodes")
       }
     }).catch(error => {
         console.log("registration error", error)
