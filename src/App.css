@@ -119,3 +119,9 @@
 .btn:hover:after {
   right: 1.4rem;
 }
+
+.date-picker{
+  height: 40px;
+  width: 100%;
+  padding-left: 8px; 
+}

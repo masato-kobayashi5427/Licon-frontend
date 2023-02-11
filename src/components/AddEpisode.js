@@ -3,6 +3,9 @@ import axios from 'axios'
 import styled from 'styled-components'
 import { useNavigate } from 'react-router-dom'
 import background from "../images/木目.png";
+import CategoryList from './CategoryList'
+import Limit from './Limit'
+import Period from './Period'
 
 const Background = styled.div`
 	height: 100%;
@@ -44,9 +47,6 @@ export default function AddEpisode(props) {
     ).then(response => {
 			console.log(response.data.image_url)
 			navigate("/episodes")
-      // if (response.data.status === 'created') {
-      //     props.handleSuccessfulAuthentication(response.data)
-      // }
     }).catch(error => {
         console.log("create episode error", error)
     })
@@ -96,30 +96,9 @@ export default function AddEpisode(props) {
 						value={price}
 						onChange={event => setPrice(event.target.value)}
 					/>
-					<input
-						className="textfield"
-						type="category"
-						name="category"
-						placeholder="カテゴリー"
-						value={category}
-						onChange={event => setCategory(event.target.value)}
-					/>
-					<input
-						className="textfield"
-						type="limit"
-						name="limit"
-						placeholder="期限"
-						value={limit}
-						onChange={event => setLimit(event.target.value)}
-					/>
-					<input
-						className="textfield"
-						type="period"
-						name="period"
-						placeholder="期間"
-						value={period}
-						onChange={event => setPeriod(event.target.value)}
-					/>
+					<CategoryList category={category} setCategory={setCategory}/>
+					<Limit limit={limit} setLimit={setLimit}/>
+					<Period period={period} setPeriod={setPeriod}/>
 					<label htmlFor="image">画像</label>
 					<input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
 					<button type="submit" className='btn'>登録</button>
