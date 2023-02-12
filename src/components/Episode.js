@@ -1,9 +1,19 @@
-import {React, useState, useEffect } from 'react'
-import styled from 'styled-components'
-import axios from 'axios'
-import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
-import CategoryList from './CategoryList'
+import {React, useState, useEffect } from 'react';
+import styled from 'styled-components';
+import axios from 'axios';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import CategoryList from './CategoryList';
+import Select from 'react-select';
+import moment from 'moment';
+
+
+const Sorts = [
+  { label: "投稿順：新〜古", value: "投稿順：新〜古" },
+  { label: "投稿順：古〜新", value: "投稿順：古〜新" },
+  { label: "価格：安い順", value: "価格：安い順" },
+  { label: "価格：高い順", value: "価格：高い順" }
+];
 
 const EpisodeList = styled.h1`
   margin: 4px 14px;
@@ -62,6 +72,7 @@ export default function Episode() {
   const [episodes, setEpisodes] = useState([])
   const [searchName, setSearchName] = useState('')
   const [category, setCategory] = useState('')
+  const [sort, setSort] = useState("投稿順：新〜古")
 
   useEffect(() => {
     axios.get("http://localhost:3001/episodes", { withCredentials: true })
@@ -73,7 +84,6 @@ export default function Episode() {
       console.log(e);
     })
   }, [])
-
 
   return (
     <>
@@ -87,6 +97,7 @@ export default function Episode() {
           }}
         />
       </div>
+      <Select options={Sorts} defaultValue={sort} placeholder="並び替え" onChange={(value) => { setSort(value["value"]) }}/>
       <CategoryList category={category} setCategory={setCategory}/>
       <div>
         {episodes.filter((val) => {
@@ -98,6 +109,16 @@ export default function Episode() {
             return val
           } else if (searchName === "" && val.category === category) {
             return val
+          }
+        }).sort(function(a, b){
+          if(sort === "投稿順：新〜古"){
+            return a.created_at < b.created_at? -1: 1;
+          } else if(sort === "投稿順：古〜新"){
+            return a.created_at > b.created_at? -1: 1;
+          } else if(sort === "価格：安い順"){
+            return a.price < b.price? -1: 1;
+          } else if(sort === "価格：高い順"){
+            return a.price > b.price? -1: 1;
           }
         }).map((val, key) => {
           return(
@@ -116,6 +137,8 @@ export default function Episode() {
                   <EpisodeTitle>{val.title}</EpisodeTitle>
                   <div>{val.explain}</div>
                   <div>{val.user.nickname}</div>
+                  <div>{moment(val.created_at).format('YYYY年MM月DD日')}</div>
+                  <div>{val.price}円</div>
                 </EpisodeText>
               </EpisodeContent>
             </List>
