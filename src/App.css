@@ -125,3 +125,10 @@
   width: 100%;
   padding-left: 8px; 
 }
+
+.checkform{
+  margin:50px;
+  height: 500px;
+  width: 500px;
+  background-color: black;
+}
