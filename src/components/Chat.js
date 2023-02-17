@@ -5,7 +5,7 @@ import ActionCable from 'actioncable';
 import { UserData} from '../App'
 
 const ChatBackground =styled.div`
-  height: 100vh;
+  height: 80vh;
   width: 100%;
   display: flex;
   justify-content: center;

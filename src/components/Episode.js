@@ -7,7 +7,6 @@ import CategoryList from './CategoryList';
 import Select from 'react-select';
 import moment from 'moment';
 
-
 const Sorts = [
   { label: "投稿順：新〜古", value: "投稿順：新〜古" },
   { label: "投稿順：古〜新", value: "投稿順：古〜新" },
@@ -15,21 +14,26 @@ const Sorts = [
   { label: "価格：高い順", value: "価格：高い順" }
 ];
 
+const MainView = styled.div`
+  padding: 24px
+`
+const SearchArea = styled.div`
+  width: 90vw;
+  margin: 0 8px;
+`
 const EpisodeList = styled.h1`
   margin: 4px 14px;
 `
 
 const SearchForm = styled.input`
   font-size: 20px;
-  width: 80%;
+  width: 100%;
   height: 40px;
-  margin: 7px 14px;
   padding: 10px;
 `
 
 const List = styled.div`
-  margin: 7px 14px;
-  padding: 10px;
+  margin: 17px 14px;
   font-size:  16px;
 `
 const EpisodeContent = styled.div`
@@ -65,7 +69,13 @@ const EpisodeText = styled.div`
 `
 
 const EpisodeTitle = styled.div`
-  font-size: 24px;
+  font-size: 20px;
+`
+const MainEpisode = styled.div`
+  height: 90px;
+`
+const BottomEpisode = styled.div`
+  display: flex;
 `
 
 export default function Episode() {
@@ -87,8 +97,9 @@ export default function Episode() {
 
   return (
     <>
+    <MainView>
       <EpisodeList>Episode List</EpisodeList>
-      <div>
+      <SearchArea>
         <SearchForm
           type="text"
           placeholder="SearchEpisode..."
@@ -96,9 +107,9 @@ export default function Episode() {
             setSearchName(event.target.value)
           }}
         />
-      </div>
       <Select options={Sorts} defaultValue={sort} placeholder="並び替え" onChange={(value) => { setSort(value["value"]) }}/>
       <CategoryList category={category} setCategory={setCategory}/>
+      </SearchArea>
       <div>
         {episodes.filter((val) => {
           if(searchName === "" && category === "") {
@@ -112,9 +123,9 @@ export default function Episode() {
           }
         }).sort(function(a, b){
           if(sort === "投稿順：新〜古"){
-            return a.created_at < b.created_at? -1: 1;
-          } else if(sort === "投稿順：古〜新"){
             return a.created_at > b.created_at? -1: 1;
+          } else if(sort === "投稿順：古〜新"){
+            return a.created_at < b.created_at? -1: 1;
           } else if(sort === "価格：安い順"){
             return a.price < b.price? -1: 1;
           } else if(sort === "価格：高い順"){
@@ -134,11 +145,15 @@ export default function Episode() {
                   <ImageContent src={val.image_url} alt="画像"></ImageContent>
                 </ImageBox>
                 <EpisodeText>
-                  <EpisodeTitle>{val.title}</EpisodeTitle>
-                  <div>{val.explain}</div>
-                  <div>{val.user.nickname}</div>
-                  <div>{moment(val.created_at).format('YYYY年MM月DD日')}</div>
-                  <div>{val.price}円</div>
+                  <MainEpisode>
+                    <EpisodeTitle>{val.title}</EpisodeTitle>
+                    <div>{val.explain}</div>
+                  </MainEpisode>
+                  <BottomEpisode>
+                    <div>{val.price}円</div>
+                    <div>{moment(val.created_at).format('YYYY年MM月DD日')}</div>
+                    <div>{val.user.nickname}</div>
+                  </BottomEpisode>
                 </EpisodeText>
               </EpisodeContent>
             </List>
@@ -147,6 +162,7 @@ export default function Episode() {
           )
         })}
       </div>
+      </MainView>
     </>
   )
 }
