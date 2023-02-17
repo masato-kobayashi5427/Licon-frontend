@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { motion } from 'framer-motion';
 import axios from 'axios'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const ImageContent = styled.img`
   height: 100%;
@@ -32,6 +33,11 @@ const EpisodeText = styled.div`
 
 export default function EpisodeRoomList(props) {
   const [episode_rooms, setEpisodeRooms] = useState([])
+  const navigate = useNavigate();
+
+  useEffect(() => {
+		if (props.user.id === undefined) {navigate('/login')}
+	});
 
   useEffect(() => {
     axios.get("http://localhost:3001/episode_rooms", { withCredentials: true })
@@ -49,24 +55,33 @@ export default function EpisodeRoomList(props) {
       return (
         <div>
         {episode_rooms.map((val, key) => {
-          console.log(val)
           return(
-            <Link to={"/episode_rooms/" + val.episode_room_id} state={ val.episode_room_id } key={key} >
-            <List >
-              <EpisodeContent>
-                <div>
-                  <ImageContent src={val.episode_room.episode.image_url} alt="画像"></ImageContent>
-                </div>
-                <EpisodeText>
-                  <div>{val.episode_room.name}</div>
-                  <div>{val.user.nickname}</div>
-                </EpisodeText>
-              </EpisodeContent>
-            </List>
-            </Link>
-        )})}
-        </div>
-      )}
+            <div>
+              <motion.div whileInView={{ scale: [0.7, 1.05, 1.0] }}
+              transition={{
+                duration: 1.0,
+                delay: 0 }}
+                key={key}>
+              <Link to={"/episode_rooms/" + val.episode_room_id} state={ val.episode_room_id } key={key} >
+              <List >
+                <EpisodeContent>
+                  <div>
+                    <ImageContent src={val.episode_room.episode.image_url} alt="画像"></ImageContent>
+                  </div>
+                  <EpisodeText>
+                    <div>{val.episode_room.name}</div>
+                    <div>{val.user.nickname}</div>
+                  </EpisodeText>
+                </EpisodeContent>
+              </List>
+              </Link>
+            </motion.div>
+          </div>
+          )
+        })
+      }</div>
+      )
+    }
     else {
       return (<div>ログインしてください</div>)
     }
