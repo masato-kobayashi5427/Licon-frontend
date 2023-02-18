@@ -7,6 +7,7 @@ import { AnimatePresence } from "framer-motion"
 import Top from './components/Top'
 import Registration from './components/auth/Registration'
 import Login from './components/auth/Login'
+import DetailUser from './components/DetailUser'
 import Episode from './components/Episode'
 import AddEpisode from './components/AddEpisode'
 import DetailEpisode from './components/DetailEpisode'
@@ -141,6 +142,12 @@ export default function App(props) {
           path={"/episodes/:id/edit"}
           element={<>
             <EditEpisode user_id={user.id} />
+          </>}
+        />
+        <Route
+          path={"/users/:id/show"}
+          element={<>
+            <DetailUser user_id={user.id} />
           </>}
         />
       </Routes>

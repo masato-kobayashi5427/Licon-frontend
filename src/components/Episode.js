@@ -6,6 +6,8 @@ import { motion } from 'framer-motion';
 import CategoryList from './CategoryList';
 import Select from 'react-select';
 import moment from 'moment';
+import sold from "../images/sold.jpg";
+import expired from "../images/expired.png";
 
 const Sorts = [
   { label: "投稿順：新〜古", value: "投稿順：新〜古" },
@@ -36,17 +38,39 @@ const List = styled.div`
   margin: 17px 14px;
   font-size:  16px;
 `
+
 const EpisodeContent = styled.div`
   height: 120px;
   width: 90vw;
   display: flex;
   border: 2px solid black;
 `
+
+const Sold = styled.img`
+  height: 40px;
+  width: 60px;
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  transform: translateX(-50%);
+  transform: translateY(-50%);
+`
+const Expired = styled.img`
+  height: 40px;
+  width: 60px;
+  position: absolute;
+  top: 20%;
+  left: 0%;
+  transform: translateX(-50%);
+  transform: translateY(-50%);
+`
+
 const ImageBox = styled.div`
   height: 100%;
   width: 120px;
   background-color: #e0e0e0;
   display: flex;
+  position: relative;
   justify-content: center;
 `
 
@@ -95,6 +119,17 @@ export default function Episode() {
     })
   }, [])
 
+  const SoldCheck = (ordered) => {
+    console.log(ordered)
+    if (ordered.length !== 0) {
+    return (<Sold src={sold} alt="売り切れ"></Sold>)
+  }}
+
+  const ExpiredCheck = (val) => {
+    if (moment(val.created_at).format('YYYY年MM月DD日') > moment(new Date()).format('YYYY年MM月DD日')) {
+      return (<Expired src={expired} alt="期限切れ"></Expired>)
+  }}
+
   return (
     <>
     <MainView>
@@ -142,6 +177,8 @@ export default function Episode() {
             <List >
               <EpisodeContent>
                 <ImageBox>
+                  {SoldCheck(val.orders)}
+                  {ExpiredCheck(val)}
                   <ImageContent src={val.image_url} alt="画像"></ImageContent>
                 </ImageBox>
                 <EpisodeText>
@@ -152,7 +189,7 @@ export default function Episode() {
                   <BottomEpisode>
                     <div>{val.price}円</div>
                     <div>{moment(val.created_at).format('YYYY年MM月DD日')}</div>
-                    <div>{val.user.nickname}</div>
+                    <Link to={"/users/" + val.user.id + "/show"} state={{user_id: val.user.id}}>{val.user.nickname}</Link>
                   </BottomEpisode>
                 </EpisodeText>
               </EpisodeContent>

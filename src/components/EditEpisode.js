@@ -22,7 +22,7 @@ export default function EditEpisode(props) {
   const [explain, setExplain] = useState("")
   const [price, setPrice] = useState("")
   const [category, setCategory] = useState("")
-	const [limit, setLimit] = useState("")
+	const [limit, setLimit] = useState(new Date())
 	const [period, setPeriod] = useState("")
 	const [image, setImage] = useState({data: "", name: ""})
 	const navigate = useNavigate();;
