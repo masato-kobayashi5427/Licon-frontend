@@ -22,7 +22,7 @@ export default function Top(props) {
     else {
       return (
         <>
-          <LoginStatus>{props.user.nickname}さん</LoginStatus>
+          <Link to={"/users/" + props.user.id + "/show"} state={{user_id: props.user.id}}>{props.user.nickname}さん</Link>
           <button onClick={props.handleLogoutClick}>ログアウト</button>
         </>
       )

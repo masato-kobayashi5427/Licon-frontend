@@ -95,7 +95,9 @@ export default function DetailEpisode(props) {
     <>
       <h1>Episode</h1>
       <div>
+        <Link to={"/users/" + detail.user.id + "/show"} state={{user_id: detail.user.id}}>
         <div>{detail.user.nickname}</div>
+        </Link>
         <EpisodeContent>{detail.title}</EpisodeContent>
         <div>{detail.explain}</div>
         <ImageContent src={detail.image_url} alt="画像" className="image-content"></ImageContent>  
