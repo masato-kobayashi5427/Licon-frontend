@@ -1,4 +1,4 @@
-import {React, useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
@@ -102,7 +102,7 @@ const BottomEpisode = styled.div`
   display: flex;
 `
 
-export default function Episode() {
+const Episode = () => {
   const [episodes, setEpisodes] = useState([])
   const [searchName, setSearchName] = useState('')
   const [category, setCategory] = useState('')
@@ -119,13 +119,13 @@ export default function Episode() {
     })
   }, [])
 
-  const SoldCheck = (ordered) => {
+  const SoldCheck = (ordered: any) => {
     console.log(ordered)
     if (ordered.length !== 0) {
     return (<Sold src={sold} alt="売り切れ"></Sold>)
   }}
 
-  const ExpiredCheck = (val) => {
+  const ExpiredCheck = (val: any) => {
     if (moment(val.created_at).format('YYYY年MM月DD日') > moment(new Date()).format('YYYY年MM月DD日')) {
       return (<Expired src={expired} alt="期限切れ"></Expired>)
   }}
@@ -138,15 +138,15 @@ export default function Episode() {
         <SearchForm
           type="text"
           placeholder="SearchEpisode..."
-          onChange={event => {
+          onChange={(event: any) => {
             setSearchName(event.target.value)
           }}
         />
-      <Select options={Sorts} defaultValue={sort} placeholder="並び替え" onChange={(value) => { setSort(value["value"]) }}/>
+      <Select options={Sorts} defaultValue={sort} placeholder="並び替え" onChange={(value: any) => { setSort(value["value"]) }}/>
       <CategoryList category={category} setCategory={setCategory}/>
       </SearchArea>
       <div>
-        {episodes.filter((val) => {
+        {episodes.filter((val: any) => {
           if(searchName === "" && category === "") {
             return val
           } else if (val.title.toLowerCase().includes(searchName.toLowerCase()) && category === "") {
@@ -156,7 +156,7 @@ export default function Episode() {
           } else if (searchName === "" && val.category === category) {
             return val
           }
-        }).sort(function(a, b){
+        }).sort(function(a: any, b: any): any{
           if(sort === "投稿順：新〜古"){
             return a.created_at > b.created_at? -1: 1;
           } else if(sort === "投稿順：古〜新"){
@@ -166,7 +166,7 @@ export default function Episode() {
           } else if(sort === "価格：高い順"){
             return a.price > b.price? -1: 1;
           }
-        }).map((val, key) => {
+        }).map((val: any, key) => {
           return(
             <motion.div whileInView={{ scale: [0.7, 1.05, 1.0] }}
             transition={{
@@ -203,3 +203,5 @@ export default function Episode() {
     </>
   )
 }
+
+export default Episode;
