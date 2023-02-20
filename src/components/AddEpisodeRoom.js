@@ -9,7 +9,7 @@ export default function AddEpisodeRoom(props) {
   const navigate = useNavigate();
 
   const payjpCheckoutProps = {
-    dataKey: 'pk_test_10e34c0fe859fe66d5fcbdbd',
+    dataKey: process.env.REACT_APP_PAYJP_PUBLIC_KEY,
     dataText: 'クレジットカードで支払う',
     dataPartial: 'true',
     onCreatedHandler: onCreated,
@@ -19,11 +19,13 @@ export default function AddEpisodeRoom(props) {
   const handleSubmit = (event) => {
     axios.post("http://localhost:3001/episode_rooms",
       {
-        name: name,
-        episode_id: location.state.id,
-        price: location.state.price,
-        token: paytoken,
-        user_ids: [location.state.user.id, props.user.id],
+        order_episode_room:{
+          name: name,
+          episode_id: location.state.id,
+          price: location.state.price,
+          token: paytoken,
+          user_ids: [location.state.user.id, props.user.id],
+        }
       },
     { withCredentials: true }
     ).then(response => {
