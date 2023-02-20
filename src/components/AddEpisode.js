@@ -27,7 +27,7 @@ export default function AddEpisode(props) {
 	
 	useEffect(() => {
 		if (props.user.id === undefined) {navigate('/login')}
-		console.log(limit)
+		console.log(period)
 	});
 
   const handleSubmit = (event) => {

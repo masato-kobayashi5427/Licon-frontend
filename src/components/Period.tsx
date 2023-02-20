@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import Select from 'react-select';
 
 const Periods = [
@@ -22,10 +22,16 @@ const Periods = [
   { label: "1ヶ月", value: 672 },
 ];
 
-export default function Period(props) {
+
+
+const Period: React.FC<{period: string, setPeriod: Dispatch<SetStateAction<string>> }> = ({
+  period, setPeriod
+}) => {
   return (
     <div className="container">
-      <Select options={Periods} defaultValue={props.period} placeholder="期間" onChange={(value) => { props.setPeriod(value["value"]) }}/>
+      <Select options={Periods} defaultValue={period} placeholder="期間" onChange={(value: any) => { setPeriod(value["value"]) }}/>
     </div>
   );
 }
+
+export default Period;
