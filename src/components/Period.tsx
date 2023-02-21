@@ -1,6 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import Select from 'react-select';
 
+interface PeriodProps {
+  period: number;
+  setPeriod: Dispatch<SetStateAction<number>>;
+}
+
 const Periods = [
   { label: "1時間", value: 1 },
   { label: "2時間", value: 2 },
@@ -22,16 +27,19 @@ const Periods = [
   { label: "1ヶ月", value: 672 },
 ];
 
-
-
-const Period: React.FC<{period: string, setPeriod: Dispatch<SetStateAction<string>> }> = ({
-  period, setPeriod
-}) => {
+const Period: React.FC<PeriodProps> = ({ period, setPeriod }) => {
   return (
     <div className="container">
-      <Select options={Periods} defaultValue={period} placeholder="期間" onChange={(value: any) => { setPeriod(value["value"]) }}/>
+      <Select
+        options={Periods}
+        defaultValue={Periods.find(p => p.value === period)}
+        placeholder="期間"
+        onChange={(value: any) => {
+          setPeriod(Number(value?.value));
+        }}
+      />
     </div>
   );
-}
+};
 
 export default Period;
