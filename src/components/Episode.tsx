@@ -9,11 +9,16 @@ import moment from 'moment';
 import sold from "../images/sold.jpg";
 import expired from "../images/expired.png";
 
-const Sorts = [
-  { label: "投稿順：新〜古", value: "投稿順：新〜古" },
-  { label: "投稿順：古〜新", value: "投稿順：古〜新" },
-  { label: "価格：安い順", value: "価格：安い順" },
-  { label: "価格：高い順", value: "価格：高い順" }
+type SortOption = {
+  label: string;
+  value: string;
+};
+
+const Sorts: SortOption[] = [
+  { value: "投稿順：新〜古", label: "投稿順：新〜古" },
+  { value: "投稿順：古〜新", label: "投稿順：古〜新" },
+  { value: "価格：安い順", label: "価格：安い順" },
+  { value: "価格：高い順", label: "価格：高い順" }
 ];
 
 const MainView = styled.div`
@@ -106,7 +111,7 @@ const Episode = () => {
   const [episodes, setEpisodes] = useState([])
   const [searchName, setSearchName] = useState('')
   const [category, setCategory] = useState('')
-  const [sort, setSort] = useState("投稿順：新〜古")
+  const [sort, setSort] = useState(Sorts[0]);
 
   useEffect(() => {
     axios.get("http://localhost:3001/episodes", { withCredentials: true })
@@ -142,7 +147,16 @@ const Episode = () => {
             setSearchName(event.target.value)
           }}
         />
-      <Select options={Sorts} defaultValue={sort} placeholder="並び替え" onChange={(value: any) => { setSort(value["value"]) }}/>
+      <Select
+        value={sort}
+        options={Sorts}
+        onChange={(value) => {
+          if (value) {
+            setSort(value);
+          }
+        }}
+        placeholder="並び替え"
+      />
       <CategoryList category={category} setCategory={setCategory}/>
       </SearchArea>
       <div>
@@ -157,13 +171,13 @@ const Episode = () => {
             return val
           }
         }).sort(function(a: any, b: any): any{
-          if(sort === "投稿順：新〜古"){
+          if(sort.value === "投稿順：新〜古"){
             return a.created_at > b.created_at? -1: 1;
-          } else if(sort === "投稿順：古〜新"){
+          } else if(sort.value === "投稿順：古〜新"){
             return a.created_at < b.created_at? -1: 1;
-          } else if(sort === "価格：安い順"){
+          } else if(sort.value === "価格：安い順"){
             return a.price < b.price? -1: 1;
-          } else if(sort === "価格：高い順"){
+          } else if(sort.value === "価格：高い順"){
             return a.price > b.price? -1: 1;
           }
         }).map((val: any, key) => {
