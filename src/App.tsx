@@ -101,13 +101,13 @@ export default function App(props: any) {
         <Route
           path={"/"}
           element={<>
-            <Episode />
+            <Episode/>
           </>}
         />
         <Route
           path={"/episodes"}
           element={<>
-            <Episode />
+            <Episode/>
           </>}
         />
         <Route
