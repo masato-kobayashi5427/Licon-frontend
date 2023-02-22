@@ -113,8 +113,10 @@ const Episode = () => {
   const [category, setCategory] = useState('')
   const [sort, setSort] = useState(Sorts[0]);
 
+  console.log(`${process.env.REACT_APP_API_ENDPOINT!}episodes`)
+
   useEffect(() => {
-    axios.get("http://localhost:3001/episodes", { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}episodes`, { withCredentials: true })
     .then(resp => {
       console.log(resp.data);
       setEpisodes(resp.data);
