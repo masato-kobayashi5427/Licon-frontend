@@ -14,6 +14,22 @@ const ImageContent = styled.img`
   width: 30vw;
 `
 
+const UpdateLink = styled(Link)`
+  color: #fff;
+  font-size: 17px;
+  font-weight: 50;
+  padding: 5px 10px;
+  background: #1f2937;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background: #36464f;
+  }
+`
+
 const DeleteButton = styled.button`
   color: #fff;
   font-size: 17px;
@@ -23,7 +39,20 @@ const DeleteButton = styled.button`
   border: none;
   border-radius: 3px;
   cursor: pointer;
-`
+  
+  &:hover {
+    background-color: #a51212;
+  }
+  
+  &:active {
+    background-color: #721212;
+  }
+  
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+`;
 
 export default function DetailEpisode(props) {
   const [detail, setDetail] = useState({
@@ -73,9 +102,9 @@ export default function DetailEpisode(props) {
     if ((props.user.id !== undefined) && (detail.user.id === props.user.id)) {
       return (
         <>
-          <Link to={"/episodes/" + params.id + "/edit"}>
+          <UpdateLink to={"/episodes/" + params.id + "/edit"}>
             Update
-          </Link>
+          </UpdateLink>
           <DeleteButton onClick={deleteEpisode}>
             Delete
           </DeleteButton>
