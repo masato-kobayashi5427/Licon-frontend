@@ -5,25 +5,38 @@ import { useParams  } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
 
-const EpisodeContent = styled.div`
-  font-size: 24px;
-`
+interface DetailData {
+  title: string;
+  explain: string;
+  image_url: string;
+  user: {
+    id: number;
+    nickname: string;
+  };
+}
+
+interface User {
+  id: number;
+}
 
 const ImageContent = styled.img`
   height: 30vh;
   width: 30vw;
+  object-fit: contain;
+  margin-bottom: 20px;
 `
 
 const UpdateLink = styled(Link)`
   color: #fff;
   font-size: 17px;
-  font-weight: 50;
-  padding: 5px 10px;
+  font-weight: 600;
+  padding: 10px 20px;
   background: #1f2937;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   cursor: pointer;
   text-decoration: none;
+  margin-right: 10px;
 
   &:hover {
     background: #36464f;
@@ -33,12 +46,13 @@ const UpdateLink = styled(Link)`
 const DeleteButton = styled.button`
   color: #fff;
   font-size: 17px;
-  font-weight: 50;
-  padding: 5px 10px;
+  font-weight: 600;
+  padding: 10px 20px;
   background: #f54242;
   border: none;
-  border-radius: 3px;
+  border-radius: 5px;
   cursor: pointer;
+  margin-right: 10px;
   
   &:hover {
     background-color: #a51212;
@@ -54,23 +68,60 @@ const DeleteButton = styled.button`
   }
 `;
 
-export default function DetailEpisode(props) {
-  const [detail, setDetail] = useState({
+const RequestButton = styled(Link)`
+  color: #fff;
+  font-size: 17px;
+  font-weight: 600;
+  padding: 10px 20px;
+  background: #1f2937;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  text-decoration: none;
+
+  &:hover {
+    background: #36464f;
+  }
+`
+
+const Title = styled.h1`
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 20px;
+`
+
+const Wrapper = styled.div`
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+`
+
+const UserLink = styled(Link)`
+  color: #333;
+  font-weight: 600;
+  text-decoration: none;
+  display: block;
+  margin-bottom: 10px;
+`
+
+export default function DetailEpisode(props: { user?: User }) {
+  const [detail, setDetail] = useState<DetailData>({
     title: '',
     explain: '',
     image_url: '',
     user: {
+      id: 0,
       nickname: '',
     },
   });
   const navigate = useNavigate();
-  let params = useParams();
+  let params = useParams<{ id: string }>();
 
   useEffect(() => {
 		if (props.user === undefined) {navigate('/login')}
 	},[props.user]);
 
-  const getEpisode = id => {
+  const getEpisode = (id: string) => {
     axios.get(`http://localhost:3001/episodes/${params.id}`)
     .then(resp => {
       console.log(resp.data)
@@ -81,57 +132,56 @@ export default function DetailEpisode(props) {
     })
   }
 
-  const deleteEpisode = id => {
+  const deleteEpisode = () => {
     axios.delete(`http://localhost:3001/episodes/${params.id}`)
     .then(resp => {
       console.log(resp.data)
       navigate("/episodes")
     })
-    .catch(e => {
+    .catch((e) => {
       console.log(e)
     })
   }
   
   useEffect(() => {
-    getEpisode(params.id);
+    getEpisode(params.id ?? "");
     console.log(params.id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
   const logincheck = () => {
-    if ((props.user.id !== undefined) && (detail.user.id === props.user.id)) {
+    if ((props.user?.id !== undefined) && (detail.user.id === props.user.id)) {
       return (
         <>
-          <UpdateLink to={"/episodes/" + params.id + "/edit"}>
+          <UpdateLink to={`/episodes/${params.id}/edit`}>
             Update
           </UpdateLink>
-          <DeleteButton onClick={deleteEpisode}>
+          <DeleteButton onClick={() => deleteEpisode()}>
             Delete
           </DeleteButton>
         </>)}
-    else if ((props.user.id !== undefined) && (detail.user.id !== props.user.id)) {
+    else if ((props.user?.id !== undefined) && (detail.user.id !== props.user.id)) {
       return (
         <>
-          <Link to="/episode_rooms/new" className='nav-item' state={ detail } >
+          <RequestButton to="/episode_rooms/new" className='nav-item' state={ detail } >
             依頼する
-          </Link>
+          </RequestButton>
         </>
       )
     }
   }
 
   return (
-    <>
-      <h1>Episode</h1>
+    <Wrapper>
       <div>
-        <Link to={"/users/" + detail.user.id + "/show"} state={{user_id: detail.user.id}}>
-        <div>{detail.user.nickname}</div>
-        </Link>
-        <EpisodeContent>{detail.title}</EpisodeContent>
+        <Title>{detail.title}</Title>
         <div>{detail.explain}</div>
         <ImageContent src={detail.image_url} alt="画像" className="image-content"></ImageContent>  
       </div>
+      <UserLink to={"/users/" + detail.user.id + "/show"} state={{user_id: detail.user.id}}>
+        <div>{detail.user.nickname}</div>
+      </UserLink>
       {logincheck()}
-    </>
+    </Wrapper>
   )
 }

@@ -113,8 +113,6 @@ const Episode = () => {
   const [category, setCategory] = useState('')
   const [sort, setSort] = useState(Sorts[0]);
 
-  console.log(`${process.env.REACT_APP_API_ENDPOINT!}episodes`)
-
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}episodes`, { withCredentials: true })
     .then(resp => {
@@ -127,7 +125,6 @@ const Episode = () => {
   }, [])
 
   const SoldCheck = (ordered: any) => {
-    console.log(ordered)
     if (ordered.length !== 0) {
     return (<Sold src={sold} alt="売り切れ"></Sold>)
   }}

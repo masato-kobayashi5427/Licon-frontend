@@ -17,25 +17,33 @@ import EpisodeRoom from './components/EpisodeRoom'
 import EditEpisode from './components/EditEpisode'
 import './App.css'
 
-export const UserData = createContext();
+export const UserData = createContext<object>({});
+
+interface User {
+  id: number;
+  nickname: string;
+}
 
 const AppView = styled.div`
   height: 100vh;
   width: 100vw;
 `
 
-export default function App(props) {
+export default function App(props: any) {
 // useState
-  const [loggedInStatus, setLoggedInStatus] = useState("未ログイン")
-  const [user, setUser] = useState({})
+  const [loggedInStatus, setLoggedInStatus] = useState<string>("未ログイン");
+  const [user, setUser] = useState<User>({
+    id: 0,
+    nickname: ''
+  });
 
   const location = useLocation();
 
-  const handleSuccessfulAuthentication = (data) => {
+  const handleSuccessfulAuthentication = (data: any) => {
     handleLogin(data)
   };
 // ログイン状態切り替え時のレンダリング
-  const handleLogin = (data) => {
+  const handleLogin = (data: any) => {
     setLoggedInStatus("ログイン中")
     setUser(data.user)
   }
@@ -46,7 +54,7 @@ export default function App(props) {
 
   // ログイン有無の確認
   const checkLoginStatus = () => {
-    axios.get("http://localhost:3001/logged_in", { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/logged_in`, { withCredentials: true })
     .then(response => {
       console.log(response)
       if (response.data.logged_in && loggedInStatus === "未ログイン") {
@@ -54,7 +62,10 @@ export default function App(props) {
         setUser(response.data.user)
       } else if (!response.data.logged_in && loggedInStatus === "ログイン中") {
         setLoggedInStatus("未ログイン")
-        setUser({})
+        setUser({
+          id: 0,
+          nickname: ''
+        })
       }
     })
     .catch(error => {
@@ -65,7 +76,7 @@ export default function App(props) {
   // ログアウト機能
   const handleLogoutClick = () => {
     console.log('handleLogo')
-    axios.delete("http://localhost:3001/logout", { withCredentials: true })
+    axios.delete(`${process.env.REACT_APP_API_ENDPOINT!}/logout`, { withCredentials: true })
     .then(response => {
       handleLogout()
     }).catch(error => console.log("ログアウトエラー", error))
@@ -74,7 +85,10 @@ export default function App(props) {
   const handleLogout = () => {
     console.log('handleLogout')
     setLoggedInStatus("未ログイン")
-    setUser({})
+    setUser({
+      id: 0,
+      nickname: ''
+    })
   }
   
   return (  
@@ -87,13 +101,13 @@ export default function App(props) {
         <Route
           path={"/"}
           element={<>
-            <Episode user={user}  />
+            <Episode />
           </>}
         />
         <Route
           path={"/episodes"}
           element={<>
-            <Episode user={user}  />
+            <Episode />
           </>}
         />
         <Route
