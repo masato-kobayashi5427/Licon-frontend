@@ -18,7 +18,7 @@ export default function Login(props: any) {
   const navigate = useNavigate();
 
   const handleSubmit = (event: any) => {
-    axios.post("http://localhost:3001/login",
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}login`,
     {
       user: {
       email: email,
