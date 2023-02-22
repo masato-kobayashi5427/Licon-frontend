@@ -12,7 +12,7 @@ const Background = styled.div`
 	flex-direction: column;
 `
 
-export default function Registration(props) {
+export default function Registration(props: any) {
 	const [nickname, setNickname] = useState("")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
@@ -27,7 +27,7 @@ export default function Registration(props) {
 	const navigate = useNavigate();
 
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: any) => {
     axios.post("http://localhost:3001/signup",
       {
         user: {
