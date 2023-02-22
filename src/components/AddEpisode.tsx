@@ -7,6 +7,15 @@ import CategoryList from './CategoryList'
 import Limit from './Limit'
 import Period from './Period'
 
+interface User {
+  id: number;
+  nickname: string;
+}
+
+interface AddEpisodeProps {
+  user: User;
+}
+
 const Background = styled.div`
 	height: 100%;
 	width: 100vw;
@@ -15,7 +24,7 @@ const Background = styled.div`
   flex-direction: column;
 `
 
-export default function AddEpisode(props: any) {
+export default function AddEpisode(props: AddEpisodeProps) {
 	const [title, setTitle] = useState("")
   const [explain, setExplain] = useState("")
   const [price, setPrice] = useState(0)
@@ -27,13 +36,13 @@ export default function AddEpisode(props: any) {
 	
 	useEffect(() => {
 		if (props.user.id === undefined) {navigate('/login')}
-		console.log(period)
 	});
 
   const handleSubmit = (event: any) => {
     axios.post(`${process.env.REACT_APP_API_ENDPOINT!}episodes`,
       {
         episode: {
+				user_id: props.user.id,
 				title: title,
         explain: explain,
         price: price,
@@ -64,7 +73,6 @@ export default function AddEpisode(props: any) {
 				})
 			}
 			reader.readAsDataURL(files[0])
-			console.log(files[0])
 		}
 	}
 	return (
