@@ -12,12 +12,12 @@ const Background = styled.div`
   flex-direction: column;
 `
 
-export default function Login(props) {
+export default function Login(props: any) {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
+  const handleSubmit = (event: any) => {
     axios.post("http://localhost:3001/login",
     {
       user: {
