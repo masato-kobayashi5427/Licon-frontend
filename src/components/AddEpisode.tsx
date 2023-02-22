@@ -15,13 +15,13 @@ const Background = styled.div`
   flex-direction: column;
 `
 
-export default function AddEpisode(props) {
+export default function AddEpisode(props: any) {
 	const [title, setTitle] = useState("")
   const [explain, setExplain] = useState("")
-  const [price, setPrice] = useState("")
+  const [price, setPrice] = useState(0)
   const [category, setCategory] = useState("")
 	const [limit, setLimit] = useState(new Date())
-	const [period, setPeriod] = useState("")
+	const [period, setPeriod] = useState(0)
 	const [image, setImage] = useState({data: "", name: ""})
 	const navigate = useNavigate();
 	
@@ -30,8 +30,8 @@ export default function AddEpisode(props) {
 		console.log(period)
 	});
 
-  const handleSubmit = (event) => {
-    axios.post("http://localhost:3001/episodes",
+  const handleSubmit = (event: any) => {
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}episodes`,
       {
         episode: {
 				title: title,
@@ -53,13 +53,13 @@ export default function AddEpisode(props) {
     event.preventDefault()
 	}
 
-	const handleImageSelect = (e) => {
+	const handleImageSelect = (e: any) => {
 		const reader = new FileReader()
 		const files = (e.target ).files
 		if (files) {
 			reader.onload = () => {
 				setImage({
-					data: reader.result ,
+					data: reader.result as string,
 					name: files[0] ? files[0].name : "unknownfile"
 				})
 			}
@@ -94,7 +94,7 @@ export default function AddEpisode(props) {
 						name="price"
 						placeholder="価格"
 						value={price}
-						onChange={event => setPrice(event.target.value)}
+						onChange={(event: any) => setPrice(event.target.value)}
 					/>
 					<CategoryList category={category} setCategory={setCategory}/>
 					<Limit limit={limit} setLimit={setLimit}/>
