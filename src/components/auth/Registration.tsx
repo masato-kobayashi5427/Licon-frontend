@@ -58,7 +58,6 @@ export default function Registration(props: any) {
 
 	return (
 		<Background style={{ backgroundImage: `url(${background})` }}>
-			{/* onSubmit、onChangeイベントを追加 */}
 			<form onSubmit={handleSubmit} className="form" >
 				<div className='form-main'>
 				<p>新規登録</p>

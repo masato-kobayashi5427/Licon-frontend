@@ -32,10 +32,17 @@ export default function AddEpisode(props: AddEpisodeProps) {
 	const [limit, setLimit] = useState(new Date())
 	const [period, setPeriod] = useState(0)
 	const [image, setImage] = useState({data: "", name: ""})
+	const [error_message, setError_message] = useState({
+		title: "",
+		explain: "",
+		category: ""
+	})
 	const navigate = useNavigate();
+
+	console.log(error_message)
 	
 	useEffect(() => {
-		if (props.user.id === undefined) {navigate('/login')}
+		if (props.user.id === 0) {navigate('/login')}
 	});
 
   const handleSubmit = (event: any) => {
@@ -54,10 +61,15 @@ export default function AddEpisode(props: AddEpisodeProps) {
     },
     { withCredentials: true }
     ).then(response => {
-			console.log(response.data.image_url)
-			navigate("/episodes")
+			if (response.data.errors !== undefined){
+				console.log(response.data.errors.title)
+				setError_message(response.data.errors)
+			}
+			else {
+				navigate("/episodes")
+			}
     }).catch(error => {
-        console.log("create episode error", error)
+      console.log(error)
     })
     event.preventDefault()
 	}
@@ -75,11 +87,19 @@ export default function AddEpisode(props: AddEpisodeProps) {
 			reader.readAsDataURL(files[0])
 		}
 	}
+
+	const ErrorMessage = (error: string) => {
+		if (error != "") {
+			return error
+		}
+	}
+
 	return (
 		<Background style={{ backgroundImage: `url(${background})` }}>
 			<form onSubmit={handleSubmit} className="form" >
 				<div className='form-main'>
 				<p>新規登録</p>
+				{error_message.title}
 				<input
 						className="textfield"
 						type="title"

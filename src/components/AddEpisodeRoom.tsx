@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import axios from 'axios'
 import PayjpCheckout from '../Payjp_Checkout'
 
-export default function AddEpisodeRoom(props) {
+export default function AddEpisodeRoom(props: any) {
   const [name, setName] = useState("")
   const [paytoken, setPaytoken] = useState('')
   const navigate = useNavigate();
@@ -16,8 +16,8 @@ export default function AddEpisodeRoom(props) {
     onFailedHandler: onFailed,
   }
   const location = useLocation();
-  const handleSubmit = (event) => {
-    axios.post("http://localhost:3001/episode_rooms",
+  const handleSubmit = (event: any) => {
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}episode_rooms`,
       {
         order_episode_room:{
           name: name,
@@ -37,11 +37,11 @@ export default function AddEpisodeRoom(props) {
     event.preventDefault()
   }
 
-  function onCreated(payload){
+  function onCreated(payload: any){
     setPaytoken(payload.token)
   }
 
-  function onFailed(payload){}
+  function onFailed(payload: any){}
 
   return (
     <div>

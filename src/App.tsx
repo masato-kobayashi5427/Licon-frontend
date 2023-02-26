@@ -38,10 +38,13 @@ export default function App(props: any) {
   });
 
   const location = useLocation();
-
+  useEffect(() => {
+    
+  })
   const handleSuccessfulAuthentication = (data: any) => {
     handleLogin(data)
   };
+  
 // ログイン状態切り替え時のレンダリング
   const handleLogin = (data: any) => {
     setLoggedInStatus("ログイン中")
@@ -50,7 +53,7 @@ export default function App(props: any) {
 // ログイン表示の切り替え
   useEffect(() => {
     checkLoginStatus()
-  },[props])
+  },[])
 
   // ログイン有無の確認
   const checkLoginStatus = () => {
@@ -155,7 +158,7 @@ export default function App(props: any) {
         <Route
           path={"/episodes/:id/edit"}
           element={<>
-            <EditEpisode user_id={user.id} />
+            <EditEpisode />
           </>}
         />
         <Route

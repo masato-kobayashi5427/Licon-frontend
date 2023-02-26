@@ -1,3 +1,4 @@
+import React from 'react';
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
@@ -20,9 +21,9 @@ const LoginMenu = styled.div`
   }
 `;
 
-export default function Top(props) {
+export default function Top(props: any) {
 // ログイン有無によるリンクの切り替え
-  const loginitem = (loggedInStatus) => {
+  const loginitem = (loggedInStatus: string) => {
     if (loggedInStatus === "未ログイン") {
       return (
       <LoginMenu>
