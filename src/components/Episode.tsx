@@ -105,6 +105,17 @@ const MainEpisode = styled.div`
 `
 const BottomEpisode = styled.div`
   display: flex;
+  justify-content: space-between;
+`
+const EpisodeLink = styled(Link)`
+  display: flex;
+  color: #333;
+  text-decoration: none;
+`
+const UserLink = styled(Link)`
+  display: inline-block;
+  color: #333;
+  text-decoration: none;
 `
 
 const Episode = () => {
@@ -116,11 +127,9 @@ const Episode = () => {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}episodes`, { withCredentials: true })
     .then(resp => {
-      console.log(resp.data);
       setEpisodes(resp.data);
     })
     .catch(e => {
-      console.log(e);
     })
   }, [])
 
@@ -130,7 +139,7 @@ const Episode = () => {
   }}
 
   const ExpiredCheck = (val: any) => {
-    if (moment(val.created_at).format('YYYY年MM月DD日') > moment(new Date()).format('YYYY年MM月DD日')) {
+    if (moment(val).format('YYYY年MM月DD日') < moment(new Date()).format('YYYY年MM月DD日')) {
       return (<Expired src={expired} alt="期限切れ"></Expired>)
   }}
 
@@ -186,28 +195,32 @@ const Episode = () => {
               duration: 1.0,
               delay: 0 }}
               key={key}>
-            <Link to={"/episodes/" + val.id} className="episode-link" >
-            <List >
-              <EpisodeContent>
-                <ImageBox>
-                  {SoldCheck(val.orders)}
-                  {ExpiredCheck(val)}
-                  <ImageContent src={val.image_url} alt="画像"></ImageContent>
-                </ImageBox>
-                <EpisodeText>
-                  <MainEpisode>
-                    <EpisodeTitle>{val.title}</EpisodeTitle>
-                    <div>{val.explain}</div>
-                  </MainEpisode>
-                  <BottomEpisode>
-                    <div>{val.price}円</div>
-                    <div>{moment(val.created_at).format('YYYY年MM月DD日')}</div>
-                    <Link to={"/users/" + val.user.id + "/show"} state={{user_id: val.user.id}}>{val.user.nickname}</Link>
-                  </BottomEpisode>
-                </EpisodeText>
-              </EpisodeContent>
-            </List>
-            </Link>
+              <List >
+                <EpisodeContent>
+                  <Link to={"/episodes/" + val.id} className="episode-link" >
+                    <ImageBox>
+                      {SoldCheck(val.orders)}
+                      {ExpiredCheck(val.limit)}
+                      <ImageContent src={val.image_url} alt="画像"></ImageContent>
+                    </ImageBox>
+                  </Link>
+                  <EpisodeText>
+                    <EpisodeLink to={"/episodes/" + val.id} className="episode-link" >
+                      <MainEpisode>
+                        <EpisodeTitle>{val.title}</EpisodeTitle>
+                        <div>{val.explain}</div>
+                      </MainEpisode>
+                    </EpisodeLink>
+                    <BottomEpisode>
+                      <EpisodeLink to={"/episodes/" + val.id} className="episode-link" >
+                        <div>{val.price}円</div>
+                        <div>{moment(val.created_at).format('YYYY年MM月DD日')}</div>
+                      </EpisodeLink>
+                      <UserLink to={"/users/" + val.user.id + "/show"} state={{user_id: val.user.id}}>{val.user.nickname}</UserLink>
+                    </BottomEpisode>
+                  </EpisodeText>
+                </EpisodeContent>
+              </List>
             </motion.div>
           )
         })}

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
-import { useNavigate } from 'react-router-dom'
-import { useParams  } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import moment from 'moment';
 import background from "../images/木目.png";
 import CategoryList from './CategoryList'
 import Limit from './Limit'
@@ -16,43 +16,22 @@ const Background = styled.div`
   flex-direction: column;
 `
 
-export default function EditEpisode(props) {
-  const [id, setId] = useState("")
-	const [title, setTitle] = useState("")
-  const [explain, setExplain] = useState("")
-  const [price, setPrice] = useState("")
-  const [category, setCategory] = useState("")
-	const [limit, setLimit] = useState(new Date())
-	const [period, setPeriod] = useState("")
+export default function EditEpisode() {
+	const location = useLocation();
+  const { detail } = location.state as any;
+	console.log(detail)
+  const id = detail.id
+	const [title, setTitle] = useState(detail.title)
+  const [explain, setExplain] = useState(detail.explain)
+  const [price, setPrice] = useState(detail.price)
+  const [category, setCategory] = useState(detail.category)
+	const [limit, setLimit] = useState()
+	const [period, setPeriod] = useState(detail.period)
 	const [image, setImage] = useState({data: "", name: ""})
 	const navigate = useNavigate();;
 
-  let params = useParams();
-  
-  const getEpisode = id => {
-    axios.get(`http://localhost:3001/episodes/${params.id}`)
-    .then(resp => {
-      setId(resp.data.id);
-      setTitle(resp.data.title);
-      setExplain(resp.data.explain);
-      setPrice(resp.data.price);
-      setCategory(resp.data.category);
-      setLimit(resp.data.limit);
-      setPeriod(resp.data.period);
-    })
-    .catch(e => {
-      console.log(e);
-    });
-  };
-
-  useEffect(() => {
-    getEpisode(params.id);
-
-  }, [params.id]);
-
-  const updateEpisode = (event) => {
-    console.log(id)
-    axios.patch(`http://localhost:3001/episodes/${id}`, 
+  const updateEpisode = (event: any) => {
+    axios.patch(`${process.env.REACT_APP_API_ENDPOINT!}episodes/${id}`, 
     {
       episode: {
       title: title,
@@ -65,7 +44,6 @@ export default function EditEpisode(props) {
     }},
     { withCredentials: true }
     ).then(response => {
-			console.log(response.data.image_url)
 			navigate("/episodes")
     }).catch(error => {
         console.log("create episode error", error)
@@ -73,13 +51,13 @@ export default function EditEpisode(props) {
     event.preventDefault()
 	}
 
-	const handleImageSelect = (e) => {
+	const handleImageSelect = (e: any) => {
 		const reader = new FileReader()
 		const files = (e.target ).files
 		if (files) {
 			reader.onload = () => {
 				setImage({
-					data: reader.result ,
+					data: reader.result as string,
 					name: files[0] ? files[0].name : "unknownfile"
 				})
 			}

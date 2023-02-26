@@ -122,7 +122,7 @@ export default function DetailEpisode(props: { user?: User }) {
 	},[props.user]);
 
   const getEpisode = (id: string) => {
-    axios.get(`http://localhost:3001/episodes/${params.id}`)
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}episodes/${params.id}`)
     .then(resp => {
       console.log(resp.data)
       setDetail(resp.data)
@@ -133,7 +133,7 @@ export default function DetailEpisode(props: { user?: User }) {
   }
 
   const deleteEpisode = () => {
-    axios.delete(`http://localhost:3001/episodes/${params.id}`)
+    axios.delete(`${process.env.REACT_APP_API_ENDPOINT!}episodes/${params.id}`)
     .then(resp => {
       console.log(resp.data)
       navigate("/episodes")
@@ -145,7 +145,6 @@ export default function DetailEpisode(props: { user?: User }) {
   
   useEffect(() => {
     getEpisode(params.id ?? "");
-    console.log(params.id)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [params.id]);
 
@@ -153,7 +152,7 @@ export default function DetailEpisode(props: { user?: User }) {
     if ((props.user?.id !== undefined) && (detail.user.id === props.user.id)) {
       return (
         <>
-          <UpdateLink to={`/episodes/${params.id}/edit`}>
+          <UpdateLink to={`/episodes/${params.id}/edit`} state={{detail: detail}}>
             Update
           </UpdateLink>
           <DeleteButton onClick={() => deleteEpisode()}>
@@ -179,7 +178,7 @@ export default function DetailEpisode(props: { user?: User }) {
         <ImageContent src={detail.image_url} alt="画像" className="image-content"></ImageContent>  
       </div>
       <UserLink to={"/users/" + detail.user.id + "/show"} state={{user_id: detail.user.id}}>
-        <div>{detail.user.nickname}</div>
+        <div>{detail.user.nickname}さん</div>
       </UserLink>
       {logincheck()}
     </Wrapper>
