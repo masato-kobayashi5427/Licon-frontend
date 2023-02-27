@@ -1,37 +1,40 @@
-# Getting Started with Create React App
+# アプリケーション名
+ライコンアプリ(フロント)
 
 
 
-## Available Scripts
+## アプリケーション概要
+他の人が持ってない経験を教え合うアプリ
+特技や趣味、日常生活の経験を伝え合うことができる。
+
+## URL
+https://licon.vercel.app/
+
+# 利用方法
+## エピソード概要の投稿
+1. ユーザーが紹介できる経験を投稿することができます。
+2. その経験について知りたいと思ったユーザーがエピソードを購入し、ルームを作成することができます。
+3. ルーム内ではチャット方式で画像を送ったり、経験を伝えることができます。
+※実装予定
+4. 　絵を書いてリアルタイムで共有したり、ボードゲームのように物を置いて、説明がよりリアルになります。
+
+## アプリケーションを作成した背景
+これまで、色々な人と出会う中で、他の人にはない特別な特技や趣味または経験を持っているのに、誰にも知られていないという人がたくさんいることを体験しました。
+その特技を誰にも共有されないままなのは勿体無いと思い、それを共有できるようなアプリがあればいいなと思い開発を始めました。
+
+## 洗い出した要件
+https://docs.google.com/spreadsheets/d/1rabr16-bgK7vZ6-YudWLpLYL5dNApkQrfndLFhaQAD8/edit#gid=982722306
+
+## 実装予定の機能
+絵を書いてリアルタイムで共有する機能
+ボードゲームのように物を置いて、状況をよりリアルに説明できる機能
+
+## データベース設計
 
 
-### `npm test`
+## 画面遷移図
 
+## 開発環境
 
-### `npm run build`
-
-
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-
-## Learn More
-
-
-
-### Code Splitting
-
-
-### Analyzing the Bundle Size
-
-### Making a Progressive Web App
-
-
-### Advanced Configuration
-
-### Deployment
-
-### `npm run build` fails to minify
+## 工夫したポイント
 
