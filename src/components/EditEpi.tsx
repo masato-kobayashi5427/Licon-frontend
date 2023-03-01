@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import styled from 'styled-components'
-import { useNavigate, useParams, useLocation } from 'react-router-dom'
-import moment from 'moment';
+import { useNavigate, useLocation } from 'react-router-dom'
 import background from "../images/木目.png";
 import CategoryList from './CategoryList'
 import Limit from './Limit'
 import Period from './Period'
+
+interface User {
+  id: number;
+  nickname: string;
+}
 
 const Background = styled.div`
 	height: 100%;
@@ -16,37 +20,53 @@ const Background = styled.div`
   flex-direction: column;
 `
 
-export default function EditEpisode() {
+export default function EditEpi(props: any) {
 	const location = useLocation();
   const { detail } = location.state as any;
-	console.log(detail)
   const id = detail.id
 	const [title, setTitle] = useState(detail.title)
   const [explain, setExplain] = useState(detail.explain)
   const [price, setPrice] = useState(detail.price)
   const [category, setCategory] = useState(detail.category)
-	const [limit, setLimit] = useState()
+	const [limit, setLimit] = useState<Date | undefined>(new Date())
 	const [period, setPeriod] = useState(detail.period)
 	const [image, setImage] = useState({data: "", name: ""})
-	const navigate = useNavigate();;
+	const [error_message, setError_message] = useState({
+		title: "",
+		explain: "",
+		category: ""
+	})
+	const navigate = useNavigate();
 
-  const updateEpisode = (event: any) => {
-    axios.patch(`${process.env.REACT_APP_API_ENDPOINT!}episodes/${id}`, 
-    {
-      episode: {
-      title: title,
-      explain: explain,
-      price: price,
-      category: category ,
-      limit: limit,
-      period: period,
-      image: image
-    }},
+	useEffect(() => {
+		if (props.user.id === 0) {navigate('/login')}
+	});
+
+  const handleSubmit = (event: any) => {
+    axios.patch(`${process.env.REACT_APP_API_ENDPOINT!}episodes/${id}`,
+      {
+        episode: {
+				user_id: props.user.id,
+				title: title,
+        explain: explain,
+        price: price,
+        category: category ,
+				limit: limit,
+				period: period,
+				image: image
+      }
+    },
     { withCredentials: true }
     ).then(response => {
-			navigate("/episodes")
+			if (response.data.errors !== undefined){
+				console.log(response.data.errors.title)
+			}
+			else {
+				console.log(response)
+				navigate("/episodes")
+			}
     }).catch(error => {
-        console.log("create episode error", error)
+      console.log(error)
     })
     event.preventDefault()
 	}
@@ -62,14 +82,16 @@ export default function EditEpisode() {
 				})
 			}
 			reader.readAsDataURL(files[0])
-			console.log(files[0])
 		}
 	}
+
+
 	return (
 		<Background style={{ backgroundImage: `url(${background})` }}>
-			<form onSubmit={updateEpisode} className="form" >
+			<form onSubmit={handleSubmit} className="form" >
 				<div className='form-main'>
-				<p>新規登録</p>
+				<p>編集画面</p>
+				{error_message.title}
 				<input
 						className="textfield"
 						type="title"
@@ -92,14 +114,14 @@ export default function EditEpisode() {
 						name="price"
 						placeholder="価格"
 						value={price}
-						onChange={event => setPrice(event.target.value)}
+						onChange={(event: any) => setPrice(event.target.value)}
 					/>
-					<CategoryList setCategory={setCategory} category={category}/>
-					<Limit setLimit={setLimit} limit={limit}/>
-					<Period setPeriod={setPeriod} period={period}/>
+					<CategoryList category={category} setCategory={setCategory}/>
+					<Limit limit={limit} setLimit={setLimit}/>
+					<Period period={period} setPeriod={setPeriod}/>
 					<label htmlFor="image">画像</label>
 					<input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
-          <button type="submit" className='btn'>更新</button>
+					<button type="submit" className='btn'>登録</button>
 				</div>
 			</form>
 		</Background>

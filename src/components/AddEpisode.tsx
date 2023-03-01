@@ -24,22 +24,43 @@ const Background = styled.div`
   flex-direction: column;
 `
 
+const ErrorMessage = styled.div`
+  color: red;
+  margin-bottom: 0px;
+`
+
+const Label = styled.label`
+  margin-right: 8px;
+`
+
+const Input = styled.input`
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 3px;
+  background-color: #f2f2f2;
+  margin-bottom: 1rem;
+  width: 100%;
+`;
+
 export default function AddEpisode(props: AddEpisodeProps) {
 	const [title, setTitle] = useState("")
   const [explain, setExplain] = useState("")
   const [price, setPrice] = useState(0)
   const [category, setCategory] = useState("")
-	const [limit, setLimit] = useState(new Date())
+	const [limit, setLimit] = useState<Date | undefined>(new Date())
 	const [period, setPeriod] = useState(0)
 	const [image, setImage] = useState({data: "", name: ""})
 	const [error_message, setError_message] = useState({
 		title: "",
 		explain: "",
-		category: ""
+		price: "",
+		category: "",
+		limit: "",
+		period: "",
+		image: "",
 	})
 	const navigate = useNavigate();
-
-	console.log(error_message)
 	
 	useEffect(() => {
 		if (props.user.id === 0) {navigate('/login')}
@@ -62,14 +83,12 @@ export default function AddEpisode(props: AddEpisodeProps) {
     { withCredentials: true }
     ).then(response => {
 			if (response.data.errors !== undefined){
-				console.log(response.data.errors.title)
 				setError_message(response.data.errors)
 			}
 			else {
 				navigate("/episodes")
 			}
     }).catch(error => {
-      console.log(error)
     })
     event.preventDefault()
 	}
@@ -88,50 +107,60 @@ export default function AddEpisode(props: AddEpisodeProps) {
 		}
 	}
 
-	const ErrorMessage = (error: string) => {
-		if (error != "") {
-			return error
-		}
-	}
 
 	return (
 		<Background style={{ backgroundImage: `url(${background})` }}>
-			<form onSubmit={handleSubmit} className="form" >
-				<div className='form-main'>
-				<p>新規登録</p>
-				{error_message.title}
-				<input
-						className="textfield"
-						type="title"
-						name="title"
-						placeholder="タイトル"
-						value={title}
-						onChange={event => setTitle(event.target.value)}
-					/>
-					<input
-						className="textfield"
-						type="explain"
-						name="explain"
-						placeholder="説明文"
-						value={explain}
-						onChange={event => setExplain(event.target.value)}
-					/>
-					<input
-						className="textfield"
-						type="price"
-						name="price"
-						placeholder="価格"
-						value={price}
-						onChange={(event: any) => setPrice(event.target.value)}
-					/>
-					<CategoryList category={category} setCategory={setCategory}/>
-					<Limit limit={limit} setLimit={setLimit}/>
-					<Period period={period} setPeriod={setPeriod}/>
-					<label htmlFor="image">画像</label>
-					<input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
-					<button type="submit" className='btn'>登録</button>
-				</div>
-			</form>
-		</Background>
+  <form onSubmit={handleSubmit} className="form">
+    <div className='form-main'>
+      <p>新規登録</p>
+      <ErrorMessage>{error_message.title}</ErrorMessage>
+      <Label htmlFor="title">タイトル</Label>
+      <Input
+        className="textfield"
+        type="title"
+        id="title"
+        name="title"
+        placeholder="タイトル"
+        value={title}
+        onChange={event => setTitle(event.target.value)}
+      />
+      <ErrorMessage>{error_message.explain}</ErrorMessage>
+      <Label htmlFor="explain">説明文</Label>
+      <Input
+        className="textfield"
+        type="explain"
+        id="explain"
+        name="explain"
+        placeholder="説明文"
+        value={explain}
+        onChange={event => setExplain(event.target.value)}
+      />
+      <ErrorMessage>{error_message.price}</ErrorMessage>
+      <Label htmlFor="price">価格</Label>
+      <Input
+        className="textfield"
+        type="price"
+        id="price"
+        name="price"
+        placeholder="価格"
+        value={price}
+        onChange={(event: any) => setPrice(event.target.value)}
+      />
+      <ErrorMessage>{error_message.category}</ErrorMessage>
+      <Label htmlFor="category">カテゴリ</Label>
+      <CategoryList category={category} setCategory={setCategory} />
+      <ErrorMessage>{error_message.limit}</ErrorMessage>
+      <Label htmlFor="limit">公開期限</Label>
+      <Limit limit={limit} setLimit={setLimit} />
+      <ErrorMessage>{error_message.period}</ErrorMessage>
+      <Label htmlFor="period">公開期間（日数）</Label>
+      <Period period={period} setPeriod={setPeriod} />
+      <ErrorMessage>{error_message.image}</ErrorMessage>
+      <Label htmlFor="image">画像</Label>
+      <Input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect} />
+      <button type="submit" className='btn'>登録</button>
+    </div>
+  </form>
+</Background>
 	)
 }

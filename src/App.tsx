@@ -14,7 +14,7 @@ import DetailEpisode from './components/DetailEpisode'
 import AddEpisodeRoom from './components/AddEpisodeRoom'
 import EpisodeRoomList from './components/EpisodeRoomList'
 import EpisodeRoom from './components/EpisodeRoom'
-import EditEpisode from './components/EditEpisode'
+import EditEpi from './components/EditEpi'
 import './App.css'
 
 export const UserData = createContext<object>({});
@@ -158,7 +158,7 @@ export default function App(props: any) {
         <Route
           path={"/episodes/:id/edit"}
           element={<>
-            <EditEpisode />
+            <EditEpi user={user} />
           </>}
         />
         <Route

@@ -1,5 +1,6 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import Select from 'react-select';
+import styled from 'styled-components';
 
 interface PeriodProps {
   period: number;
@@ -27,9 +28,14 @@ const Periods = [
   { label: "1ヶ月", value: 672 },
 ];
 
+const Container = styled.div`
+  margin: 10px 0;
+  background-color: #f2f2f2;
+`;
+
 const Period: React.FC<PeriodProps> = ({ period, setPeriod }) => {
   return (
-    <div className="container">
+    <Container>
       <Select
         options={Periods}
         defaultValue={Periods.find(p => p.value === period)}
@@ -38,7 +44,7 @@ const Period: React.FC<PeriodProps> = ({ period, setPeriod }) => {
           setPeriod(Number(value?.value));
         }}
       />
-    </div>
+    </Container>
   );
 };
 
