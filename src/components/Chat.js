@@ -3,6 +3,7 @@ import axios from 'axios'
 import styled from 'styled-components'
 import ActionCable from 'actioncable';
 import { UserData} from '../App'
+import Canvas from './Canvas';
 
 const ChatBackground =styled.div`
   height: 80vh;
@@ -116,6 +117,7 @@ export default function Chat(props) {
   const [subscription, setSubscription] = useState();
   const [chats, setChats] = useState([]);
   const [image, setImage] = useState({ data: '', name: '' });
+  const [canvasUrl, setCanvasUrl] = useState("")
 
   const userData =useContext(UserData);
   const ref = useRef();
@@ -142,7 +144,10 @@ export default function Chat(props) {
     if (receivedMessage.sender === userData.nickname) {
       if (body.includes('http://')) {
         setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
-      } 
+      }
+      else if (body.includes('data:image/png;base64,')) {
+        setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
+      }
       else {
         setText([text, <HomeChat id="history"><HomeChatBox id="chat">{sender}:{body}</HomeChatBox></HomeChat>]);
       }
@@ -150,7 +155,10 @@ export default function Chat(props) {
     else {
       if (body.includes('http://')) {
         setText([text, <AwayChat id="history"><AwayImageContent src={body} alt="画像"></AwayImageContent></AwayChat>]);
-      } 
+      }
+      else if (body.includes('data:image/png;base64,')) {
+        setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
+      }
       else {
         setText([text, <AwayChat id="history"><AwayChatBox id="chat">{sender}:{body}</AwayChatBox></AwayChat>]);
       }
@@ -189,17 +197,23 @@ export default function Chat(props) {
     return (
       <>
       {chats.map((val, key) => {
-        if ((val.image_url === null) && (val.user_id === userData.id)) {
-          return(<HomeChat id="home"><HomeChatBox key={key}>{val.user.nickname}: {val.content}</HomeChatBox></HomeChat>)
+        if ((val.canvasUrl !== null) && (val.user_id === userData.id)) {
+          return (<HomeChat key={key}><HomeImageContent src={val.canvasUrl} alt="画像"></HomeImageContent></HomeChat>)
+        }
+        else if ((val.canvasUrl !== null) && (val.user_id !== userData.id)) {
+          return (<AwayChat key={key}><AwayImageContent src={val.canvasUrl} alt="画像"></AwayImageContent></AwayChat>)
+        }
+        else if ((val.image_url === null) && (val.user_id === userData.id)) {
+          return(<HomeChat key={key}><HomeChatBox>{val.user.nickname}: {val.content}</HomeChatBox></HomeChat>)
         } 
         else if ((val.image_url !==  null) && (val.user_id === userData.id)) {
-          return(<HomeChat><ImageBox><HomeImageContent src={val.image_url} alt="画像"></HomeImageContent></ImageBox></HomeChat>)
+          return(<HomeChat key={key}><ImageBox><HomeImageContent src={val.image_url} alt="画像"></HomeImageContent></ImageBox></HomeChat>)
         }
         else if ((val.image_url === null) && (val.user_id !== userData.id)) {
-          return(<AwayChat id="away"><AwayChatBox key={key}>{val.user.nickname}: {val.content}</AwayChatBox></AwayChat>)
+          return(<AwayChat key={key}><AwayChatBox>{val.user.nickname}: {val.content}</AwayChatBox></AwayChat>)
         }
         else {
-          return(<AwayChat><ImageBox><AwayImageContent src={val.image_url} alt="画像"></AwayImageContent></ImageBox></AwayChat>)
+          return(<AwayChat key={key}><ImageBox><AwayImageContent src={val.image_url} alt="画像"></AwayImageContent></ImageBox></AwayChat>)
         }
       })}
       </>
@@ -251,13 +265,29 @@ export default function Chat(props) {
     { withCredentials: true }
     ).then(response => {
       console.log(response)
-			console.log(response.data.chat.image_url)
       subscription?.perform('chat', { body: response.data.chat.image_url });
     }).catch(error => {
         console.log("create chat error", error)
     })
     event.preventDefault()
 	}
+
+  const sendCanvas = () => {
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT}episode_rooms/${props.episode_room_id}/chats`,
+    {
+      chat: {
+      canvasUrl: canvasUrl,
+      episode_room_id: props.episode_room_id
+    }
+    },
+    { withCredentials: true }
+    ).then(response => {
+      console.log(response)
+      subscription?.perform('chat', { body: response.data.chat.canvasUrl });
+    }).catch(error => {
+      console.log("create canvas error", error)
+    })
+  };
 
 
   return (
@@ -287,6 +317,9 @@ export default function Chat(props) {
           <input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
 					<button type="submit" className='btn'>画像投稿</button>
         </form>
+        {/* 絵を描く機能 */}
+        <Canvas width={800} height={600} setCanvasUrl={setCanvasUrl}/>
+        <button onClick={sendCanvas} >絵を投稿する</button>
       </div>
     </div >
   );

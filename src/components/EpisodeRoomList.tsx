@@ -95,16 +95,18 @@ export default function EpisodeRoomList(props: any) {
   const [episode_rooms, setEpisodeRooms] = useState<EpisodeRoom[]>([])
   const navigate = useNavigate();
 
-  useEffect(() => {
-		if (props.user.id === 0) {navigate('/login')}
-	});
+  // useEffect(() => {
+	// 	if (props.user.id === 0) {navigate('/login')}
+	// });
 
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}episode_rooms`, { withCredentials: true })
     .then(resp => {
+      console.log(resp)
       setEpisodeRooms(resp.data);
     })
     .catch(e => {
+      console.log(e)
     })
   }, [])
 
