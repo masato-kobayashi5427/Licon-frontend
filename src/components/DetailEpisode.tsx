@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
 import axios from 'axios'
-import { useParams  } from 'react-router-dom';
-import { Link } from 'react-router-dom'
-import { useNavigate } from 'react-router-dom'
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 interface DetailData {
   title: string;
@@ -162,7 +160,7 @@ export default function DetailEpisode(props: { user?: User }) {
     else if ((props.user?.id !== undefined) && (detail.user.id !== props.user.id)) {
       return (
         <>
-          <RequestButton to="/episode_rooms/new" className='nav-item' state={ detail } >
+          <RequestButton to="/episode_rooms/new" className='nav-item' state={{detail: detail}} >
             依頼する
           </RequestButton>
         </>
