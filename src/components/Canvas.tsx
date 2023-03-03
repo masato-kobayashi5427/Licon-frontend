@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import styled from 'styled-components'
 
 interface IProps {
   width: number;
@@ -14,6 +15,30 @@ interface IRect {
   top: number;
   bottom: number;
 }
+
+const Container = styled.section`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const CanvasWrapper = styled.div`
+  flex: 1;
+  margin-right: 10px;
+`;
+
+const Canpas = styled.canvas`
+  border: 1px solid #000000;
+`;
+
+const ClearButton = styled.button`
+  background-color: #ffffff;
+  color: #000000;
+  border: 1px solid #000000;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+`;
 
 const Canvas: React.FC<IProps> = (props) => {
   const { width, height, setCanvasUrl } = props
@@ -60,7 +85,7 @@ const Canvas: React.FC<IProps> = (props) => {
     }
     ctx.lineTo(x, y);
     ctx.lineCap = "round";
-    ctx.lineWidth = 10;
+    ctx.lineWidth = 5;
     ctx.strokeStyle= "#000000";
     ctx.stroke();
     mouseX = x;
@@ -76,21 +101,22 @@ const Canvas: React.FC<IProps> = (props) => {
   }
 
   return (
-    <section>
-      <div>
-        <canvas onMouseDown={OnClick}
-                onMouseMove={OnMove}
-                onMouseUp={DrawEnd}
-                onMouseOut={DrawEnd}
-                ref={canvasRef}
-                width={`${width}px`}
-                height={`${height}px`}
+    <Container>
+      <CanvasWrapper>
+        <Canpas 
+          onMouseDown={OnClick}
+          onMouseMove={OnMove}
+          onMouseUp={DrawEnd}
+          onMouseOut={DrawEnd}
+          ref={canvasRef}
+          width={`${width}px`}
+          height={`${height}px`}
         />
-      </div>
+      </CanvasWrapper>
       <div>
-        <button onClick={Reset}>リセット</button>
+        <ClearButton onClick={Reset}>リセット</ClearButton>
       </div>
-    </section>
+    </Container>
   );
 }
 
