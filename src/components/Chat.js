@@ -351,6 +351,7 @@ export default function Chat(props) {
         console.log("create chat error", error)
     })
     event.preventDefault()
+    setImageUrl("");
 	}
 
   const sendCanvas = () => {
