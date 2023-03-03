@@ -111,6 +111,10 @@ const HomeChatBox = styled.div`
     box-shadow: inset 3px -15px 0 -5px #7adc40;
   }
 `;
+const InputArea = styled.div`
+  width: 90%;
+  margin: 0 auto;
+`
 
 const TextSubmitArea = styled.div`
   display: flex;
@@ -351,7 +355,7 @@ export default function Chat(props) {
         console.log("create chat error", error)
     })
     event.preventDefault()
-    setImageUrl("");
+    setImage("");
 	}
 
   const sendCanvas = () => {
@@ -373,15 +377,16 @@ export default function Chat(props) {
 
 
   return (
-    <div>
+    <>
       <Main>
-        <ChatBackground id="backgound"><ChatArea>
-          {ChatList(chats)}
-          {text}
-          <div ref={ref}></div>
-          </ChatArea></ChatBackground>
-        <div>
-
+        <ChatBackground id="backgound">
+          <ChatArea>
+            {ChatList(chats)}
+            {text}
+            <div ref={ref}></div>
+          </ChatArea>
+        </ChatBackground>
+        <InputArea>
           {/* テキストを投稿する機能 */}
           <TextSubmitArea>
             <TextInput
@@ -396,7 +401,7 @@ export default function Chat(props) {
               onChange={event => setInput(event.currentTarget.value)}
             />
             <TextSubmitButton onClick={handleSend} className='btn' disabled={input === ''}>
-              send
+              テキスト投稿
             </TextSubmitButton>
           </TextSubmitArea>
 
@@ -408,11 +413,11 @@ export default function Chat(props) {
 
           {/* 絵を投稿する機能 */}
           <CanvasArea>
-            <Canvas width={200} height={150} setCanvasUrl={setCanvasUrl}/>
-            <CanvasSubmitButton className='btn' onClick={sendCanvas} >絵を投稿する</CanvasSubmitButton>
+            <Canvas width={300} height={300} setCanvasUrl={setCanvasUrl}/>
+            <CanvasSubmitButton className='btn' onClick={sendCanvas} >絵を投稿</CanvasSubmitButton>
           </CanvasArea>
-        </div>
+        </InputArea>
       </Main>
-    </div >
+    </>
   )
 }
