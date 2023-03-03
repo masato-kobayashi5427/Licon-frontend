@@ -5,14 +5,19 @@ import ActionCable from 'actioncable';
 import { UserData} from '../App'
 import Canvas from './Canvas';
 
+const Main =styled.div`
+  height: 80%;
+  width: 1000px;
+  margin: 0 auto;
+`
+
 const ChatBackground =styled.div`
-  height: 80vh;
   width: 100%;
   display: flex;
   justify-content: center;
 `
 const ChatArea = styled.div`
-  width: 1000px;
+  width: 100%;
   display: flex;
   flex-flow: column;
   background: #769ece;
@@ -105,10 +110,86 @@ const HomeChatBox = styled.div`
     border-radius: 0 18px 18px 6px/0 18px 18px 1px;
     box-shadow: inset 3px -15px 0 -5px #7adc40;
   }
+`;
+
+const TextSubmitArea = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const TextInput = styled.input`
+  height: 40px;
+  padding: 0 10px;
+  margin-top: 4px;
+  margin-right: 10px;
+  border-radius: 4px;
+  background-color: #fff;
+  flex-grow: 1;
+`;
+
+const TextSubmitButton = styled.button`
+  height: 40px;
+  background-color: #4CAF50; /* Green */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`;
+
+const ImageForm = styled.form`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const ImageInput = styled.input`
+  height: 40px;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`;
+
+const ImageSubmitButton = styled.button`
+  height: 40px;
+  background-color: #008CBA; /* Blue */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`;
+
+const CanvasArea = styled.div`
+  display: flex;
+  justify-content: space-between;
 `
-
-
-
+const CanvasSubmitButton = styled.button`
+  height: 40px;
+  background-color: #f44336; /* Red */
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+`;
 
 export default function Chat(props) {
   const [receivedMessage, setReceivedMessage] = useState(null);
@@ -270,6 +351,7 @@ export default function Chat(props) {
         console.log("create chat error", error)
     })
     event.preventDefault()
+    setImageUrl("");
 	}
 
   const sendCanvas = () => {
@@ -292,35 +374,45 @@ export default function Chat(props) {
 
   return (
     <div>
-      <ChatBackground id="backgound"><ChatArea>
-        {ChatList(chats)}
-        {text}
-        <div ref={ref}></div>
-        </ChatArea></ChatBackground>
-      <div>
-        <input
-          type="text"
-          onKeyDown={(event) => {
-            if (event.key === 'Enter') {
-              handleSend();
-            }
-          }}
-          value={input}
-          style={{ width: "400px", marginRight: "10px" }}
-          onChange={event => setInput(event.currentTarget.value)}
-        />
-        <button onClick={handleSend} disabled={input === ''}>
-          send
-        </button>
-        {/* 画像投稿機能 */}
-        <form onSubmit={handleSubmit} className="form" >
-          <input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
-					<button type="submit" className='btn'>画像投稿</button>
-        </form>
-        {/* 絵を描く機能 */}
-        <Canvas width={800} height={600} setCanvasUrl={setCanvasUrl}/>
-        <button onClick={sendCanvas} >絵を投稿する</button>
-      </div>
+      <Main>
+        <ChatBackground id="backgound"><ChatArea>
+          {ChatList(chats)}
+          {text}
+          <div ref={ref}></div>
+          </ChatArea></ChatBackground>
+        <div>
+
+          {/* テキストを投稿する機能 */}
+          <TextSubmitArea>
+            <TextInput
+              type="text"
+              onKeyDown={(event) => {
+                if (event.key === 'Enter') {
+                  handleSend();
+                }
+              }}
+              value={input}
+              style={{ width: "400px", marginRight: "10px" }}
+              onChange={event => setInput(event.currentTarget.value)}
+            />
+            <TextSubmitButton onClick={handleSend} className='btn' disabled={input === ''}>
+              send
+            </TextSubmitButton>
+          </TextSubmitArea>
+
+          {/* 画像投稿機能 */}
+          <ImageForm onSubmit={handleSubmit} >
+            <ImageInput type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect}/>
+            <ImageSubmitButton type="submit" className='btn'>画像投稿</ImageSubmitButton>
+          </ImageForm>
+
+          {/* 絵を投稿する機能 */}
+          <CanvasArea>
+            <Canvas width={200} height={150} setCanvasUrl={setCanvasUrl}/>
+            <CanvasSubmitButton className='btn' onClick={sendCanvas} >絵を投稿する</CanvasSubmitButton>
+          </CanvasArea>
+        </div>
+      </Main>
     </div >
-  );
+  )
 }
