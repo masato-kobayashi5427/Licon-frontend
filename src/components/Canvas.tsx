@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components'
 
 interface IProps {
@@ -29,6 +29,12 @@ const CanvasWrapper = styled.div`
 
 const Canpas = styled.canvas`
   border: 1px solid #000000;
+  cursor: crosshair;
+`;
+
+const RangeInput = styled.input`
+  margin: 10px;
+  display: block;
 `;
 
 const ClearButton = styled.button`
@@ -40,8 +46,20 @@ const ClearButton = styled.button`
   cursor: pointer;
 `;
 
+const ColorPicker = styled.input.attrs({
+  type: "color",
+})`
+  height: 40px;
+  width: 100px;
+  margin-left: 10px;
+`;
+
 const Canvas: React.FC<IProps> = (props) => {
   const { width, height, setCanvasUrl } = props
+  const [color, setColor] = useState<string>("#000000");
+  const [lineWidth, setLineWidth] = useState<number>(5);
+  const [image, setImage] = useState<HTMLImageElement | null>(null);
+
   let canvasRef = useRef<HTMLCanvasElement | null>(null);
   let mouseX: number | null = null;
   let mouseY: number | null = null;
@@ -85,8 +103,8 @@ const Canvas: React.FC<IProps> = (props) => {
     }
     ctx.lineTo(x, y);
     ctx.lineCap = "round";
-    ctx.lineWidth = 5;
-    ctx.strokeStyle= "#000000";
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color;
     ctx.stroke();
     mouseX = x;
     mouseY = y;
@@ -99,6 +117,29 @@ const Canvas: React.FC<IProps> = (props) => {
     const ctx = getContext();
     ctx.clearRect(0, 0, width, height);
   }
+
+  const OnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) { return; }
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      setImage(img);
+    }
+    img.src = url;
+  }
+
+  const DrawImage = () => {
+    if (!image) { return; }
+    const canvas = canvasRef.current!;
+    const ctx = canvas.getContext('2d')!;
+    const ratio = Math.min(canvas.width / image.width, canvas.height / image.height);
+    const width = image.width * ratio;
+    const height = image.height * ratio;
+    ctx.drawImage(image, 0, 0, width, height);
+    setCanvasUrl(canvas.toDataURL());
+  }
+  
 
   return (
     <Container>
@@ -113,6 +154,20 @@ const Canvas: React.FC<IProps> = (props) => {
           height={`${height}px`}
         />
       </CanvasWrapper>
+      <div>
+        <div> 色を変更</div>
+        <ColorPicker value={color} onChange={(e) => setColor(e.target.value)} />
+        <RangeInput
+          type="range"
+          min="1"
+          max="10"
+          value={lineWidth} // lineWidthを設定
+          onChange={(e) => setLineWidth(Number(e.target.value))}
+        />
+        <span>線の幅：{lineWidth}</span>
+        <input type="file" onChange={OnChange} />
+        <button onClick={DrawImage}>画像を描画する</button>
+      </div>
       <div>
         <ClearButton onClick={Reset}>リセット</ClearButton>
       </div>
