@@ -18,8 +18,8 @@ interface User {
 }
 
 const ImageContent = styled.img`
-  height: 30vh;
-  width: 30vw;
+  height: 50vh;
+  width: 50vw;
   object-fit: contain;
   margin-bottom: 20px;
 `
@@ -89,7 +89,7 @@ const Title = styled.h1`
 `
 
 const Wrapper = styled.div`
-  max-width: 800px;
+  max-width: 80vw;
   margin: 0 auto;
   padding: 20px;
 `
@@ -100,6 +100,11 @@ const UserLink = styled(Link)`
   text-decoration: none;
   display: block;
   margin-bottom: 10px;
+`
+
+const MainWrapper = styled.div`
+  font-size: 24px;
+  font-weight: bold;
 `
 
 export default function DetailEpisode(props: { user?: User }) {
@@ -172,6 +177,7 @@ export default function DetailEpisode(props: { user?: User }) {
     <Wrapper>
       <div>
         <Title>{detail.title}</Title>
+        <MainWrapper>説明文</MainWrapper>
         <div>{detail.explain}</div>
         <ImageContent src={detail.image_url} alt="画像" className="image-content"></ImageContent>  
       </div>
