@@ -209,7 +209,7 @@ export default function Chat(props) {
   const ref = useRef();
 
   // Action Cableに接続
-  const cable = useMemo(() => ActionCable.createConsumer(`${process.env.REACT_APP_API_ENDPOINT}cable`, { withCredentials: true }), []);
+  const cable = useMemo(() => ActionCable.createConsumer(`${process.env.REACT_APP_API_ENDPOINT}/cable`, { withCredentials: true }), []);
 
   useEffect(() => {
     console.log(cable)
