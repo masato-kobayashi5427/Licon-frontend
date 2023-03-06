@@ -261,7 +261,7 @@ export default function Chat(props) {
 
 // チャット履歴を取得
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_ENDPOINT}episode_rooms/${props.episode_room_id}/chats`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT}/episode_rooms/${props.episode_room_id}/chats`, { withCredentials: true })
     .then(resp => {
       setChats(resp.data)
       console.log(chats)
@@ -307,7 +307,7 @@ export default function Chat(props) {
   const handleSend = () => {
     // inputをサーバーに送信
     // chat_channel.rbのchatメソッドに送信
-    axios.post(`${process.env.REACT_APP_API_ENDPOINT}episode_rooms/${props.episode_room_id}/chats`,
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT}/episode_rooms/${props.episode_room_id}/chats`,
     {
       chat: {
       content: input,
@@ -339,7 +339,7 @@ export default function Chat(props) {
 	}
 
   const handleSubmit = (event) => {
-    axios.post(`${process.env.REACT_APP_API_ENDPOINT}episode_rooms/${props.episode_room_id}/chats`,
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT}/episode_rooms/${props.episode_room_id}/chats`,
       {
         chat: {
 				image: image,
@@ -358,7 +358,7 @@ export default function Chat(props) {
 	}
 
   const sendCanvas = () => {
-    axios.post(`${process.env.REACT_APP_API_ENDPOINT}episode_rooms/${props.episode_room_id}/chats`,
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT}/episode_rooms/${props.episode_room_id}/chats`,
     {
       chat: {
       canvasUrl: canvasUrl,

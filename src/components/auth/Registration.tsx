@@ -28,7 +28,7 @@ export default function Registration(props: any) {
 
 
   const handleSubmit = (event: any) => {
-    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}signup`,
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}/signup`,
       {
         user: {
 				nickname: nickname,

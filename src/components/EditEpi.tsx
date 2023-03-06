@@ -43,7 +43,7 @@ export default function EditEpi(props: any) {
 	});
 
   const handleSubmit = (event: any) => {
-    axios.patch(`${process.env.REACT_APP_API_ENDPOINT!}episodes/${id}`,
+    axios.patch(`${process.env.REACT_APP_API_ENDPOINT!}/episodes/${id}`,
       {
         episode: {
 				user_id: props.user.id,

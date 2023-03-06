@@ -95,7 +95,7 @@ export default function EpisodeRoomList(props: any) {
   const [episode_rooms, setEpisodeRooms] = useState<EpisodeRoom[]>([])
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}episode_rooms`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/episode_rooms`, { withCredentials: true })
     .then(resp => {
       console.log(resp)
       setEpisodeRooms(resp.data);

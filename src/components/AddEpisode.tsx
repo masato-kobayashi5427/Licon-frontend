@@ -67,7 +67,7 @@ export default function AddEpisode(props: AddEpisodeProps) {
 	// });
 
   const handleSubmit = (event: any) => {
-    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}episodes`,
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}/episodes`,
       {
         episode: {
 				user_id: props.user.id,

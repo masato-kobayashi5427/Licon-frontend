@@ -81,7 +81,7 @@ export default function DetailUser(props: any) {
   const location = useLocation()
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}users/${location.state.user_id}`)
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/users/${location.state.user_id}`)
       .then(resp => {
         console.log(resp.data)
         setDetail(resp.data)
