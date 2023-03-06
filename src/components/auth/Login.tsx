@@ -20,7 +20,7 @@ export default function Login(props: any) {
   console.log(process.env.REACT_APP_API_ENDPOINT)
 
   const handleSubmit = (event: any) => {
-    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}login`,
+    axios.post(`${process.env.REACT_APP_API_ENDPOINT!}/login`,
     {
       user: {
       email: email,

@@ -129,7 +129,7 @@ const Episode = () => {
   const [sort, setSort] = useState(Sorts[0]);
 
   useEffect(() => {
-    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}episodes`, { withCredentials: true })
+    axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/episodes`, { withCredentials: true })
     .then(resp => {
       setEpisodes(resp.data);
     })
