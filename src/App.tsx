@@ -38,9 +38,7 @@ export default function App(props: any) {
   });
 
   const location = useLocation();
-  useEffect(() => {
-    
-  })
+
   const handleSuccessfulAuthentication = (data: any) => {
     handleLogin(data)
   };
@@ -58,22 +56,19 @@ export default function App(props: any) {
   // ログイン有無の確認
   const checkLoginStatus = () => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/logged_in`, { withCredentials: true })
-    .then(response => {
-      console.log(response)
-      if (response.data.logged_in && loggedInStatus === "未ログイン") {
-        setLoggedInStatus("ログイン中")
-        setUser(response.data.user)
-      } else if (!response.data.logged_in && loggedInStatus === "ログイン中") {
-        setLoggedInStatus("未ログイン")
-        setUser({
-          id: 0,
-          nickname: ''
-        })
-      }
-    })
-    .catch(error => {
-      console.log("ログインエラー", error)
-    })
+      .then(response => {
+        console.log(response)
+        if (response.data.logged_in) {
+          setUser(response.data.user);
+          setLoggedInStatus(prevLoggedInStatus => prevLoggedInStatus !== "ログイン中" ? "ログイン中" : prevLoggedInStatus);
+        } else {
+          setUser({id: 0, nickname: ''});
+          setLoggedInStatus(prevLoggedInStatus => prevLoggedInStatus !== "未ログイン" ? "未ログイン" : prevLoggedInStatus);
+        }
+      })
+      .catch(error => {
+        console.log("ログインエラー", error)
+      })
   }
 
   // ログアウト機能
