@@ -62,9 +62,9 @@ export default function AddEpisode(props: AddEpisodeProps) {
 	})
 	const navigate = useNavigate();
 	
-	useEffect(() => {
-		if (props.user.id === 0) {navigate('/login')}
-	});
+	// useEffect(() => {
+	// 	if (props.user.id === 0) {navigate('/login')}
+	// });
 
   const handleSubmit = (event: any) => {
     axios.post(`${process.env.REACT_APP_API_ENDPOINT!}episodes`,

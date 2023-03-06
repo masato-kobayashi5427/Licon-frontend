@@ -335,7 +335,6 @@ export default function Chat(props) {
 				})
 			}
 			reader.readAsDataURL(files[0])
-			console.log(files[0])
 		}
 	}
 

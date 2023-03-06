@@ -109,12 +109,16 @@ const BottomEpisode = styled.div`
 `
 const EpisodeLink = styled(Link)`
   display: flex;
+  justify-content: space-between;
   color: #333;
   text-decoration: none;
 `
 const UserLink = styled(Link)`
+  width: 200px;
+  margin-right: 10px;
   display: inline-block;
   color: #333;
+  text-align: right;
   text-decoration: none;
 `
 
