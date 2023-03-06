@@ -25,7 +25,8 @@ export default function AddEpisodeRoom(props: any) {
           episode_id: detail.id,
           price: detail.price,
           token: paytoken,
-          user_ids: [detail.user.id, props.user.id],
+          user_id: props.user.id,
+          user_ids: [detail.user.id, props.user.id]
         }
       },
     { withCredentials: true }
