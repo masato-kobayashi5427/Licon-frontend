@@ -17,6 +17,7 @@ const ChatBackground =styled.div`
   justify-content: center;
 `
 const ChatArea = styled.div`
+  height: 400px;
   width: 100%;
   display: flex;
   flex-flow: column;
