@@ -17,6 +17,8 @@ export default function Login(props: any) {
   const [password, setPassword] = useState("")
   const navigate = useNavigate();
 
+  console.log(process.env.REACT_APP_API_ENDPOINT)
+
   const handleSubmit = (event: any) => {
     axios.post(`${process.env.REACT_APP_API_ENDPOINT!}login`,
     {
