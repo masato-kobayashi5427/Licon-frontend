@@ -17,9 +17,6 @@ export default function AddEpisodeRoom(props: any) {
   }
   const location = useLocation();
   const detail = location.state ? location.state.detail : null;
-  console.log(detail.id)
-  console.log(detail.price)
-  console.log(detail.user.id)
   const handleSubmit = (event: any) => {
     axios.post(`${process.env.REACT_APP_API_ENDPOINT!}episode_rooms`,
       {
