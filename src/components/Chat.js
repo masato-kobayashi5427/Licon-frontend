@@ -18,15 +18,15 @@ const ChatBackground =styled.div`
 `
 const ChatArea = styled.div`
   height: 400px;
-  width: 100%;
+  width: 80vw%;
   display: flex;
   flex-flow: column;
   background: #769ece;
   border: 1px solid #000;
   overflow-y: scroll;
+  overflow-x: hidden; /* ここを追加 */
   padding-bottom: 10px;
-  `
-
+`;
 const HomeChat = styled.div`
   height: auto;
   width: 100%;
@@ -317,6 +317,7 @@ export default function Chat(props) {
     },
     { withCredentials: true }
     ).then(response => {
+      console.log(response)
       subscription?.perform('chat', { body: input });
       setInput("")
     }).catch(error => {
