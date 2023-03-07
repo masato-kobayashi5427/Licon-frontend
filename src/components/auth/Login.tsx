@@ -28,6 +28,7 @@ export default function Login(props: any) {
     },
     { withCredentials: true }
     ).then(response => {
+        console.log(response)
         if (response.data.logged_in) {
           props.handleSuccessfulAuthentication(response.data)
           navigate("/episodes")
