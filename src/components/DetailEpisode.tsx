@@ -127,22 +127,22 @@ export default function DetailEpisode(props: { user?: User }) {
   const getEpisode = (id: string) => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/episodes/${params.id}`)
     .then(resp => {
-      console.log(resp.data)
+      // console.log(resp.data)
       setDetail(resp.data)
     })
     .catch(e => {
-      console.log(e)
+      // console.log(e)
     })
   }
 
   const deleteEpisode = () => {
     axios.delete(`${process.env.REACT_APP_API_ENDPOINT!}/episodes/${params.id}`)
     .then(resp => {
-      console.log(resp.data)
+      // console.log(resp.data)
       navigate("/episodes")
     })
     .catch((e) => {
-      console.log(e)
+      // console.log(e)
     })
   }
   

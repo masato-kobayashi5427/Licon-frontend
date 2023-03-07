@@ -57,7 +57,7 @@ export default function App(props: any) {
   const checkLoginStatus = () => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/logged_in`, { withCredentials: true })
       .then(response => {
-        console.log(response)
+        // console.log(response)
         if (response.data.logged_in) {
           setUser(response.data.user);
           setLoggedInStatus(prevLoggedInStatus => prevLoggedInStatus !== "ログイン中" ? "ログイン中" : prevLoggedInStatus);
@@ -67,7 +67,7 @@ export default function App(props: any) {
         }
       })
       .catch(error => {
-        console.log("ログインエラー", error)
+        // console.log("ログインエラー", error)
       })
   }
 

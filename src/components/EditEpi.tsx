@@ -59,14 +59,14 @@ export default function EditEpi(props: any) {
     { withCredentials: true }
     ).then(response => {
 			if (response.data.errors !== undefined){
-				console.log(response.data.errors.title)
+				// console.log(response.data.errors.title)
 			}
 			else {
-				console.log(response)
+				// console.log(response)
 				navigate("/episodes")
 			}
     }).catch(error => {
-      console.log(error)
+      // console.log(error)
     })
     event.preventDefault()
 	}

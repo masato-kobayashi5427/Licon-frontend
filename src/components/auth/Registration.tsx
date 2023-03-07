@@ -45,13 +45,13 @@ export default function Registration(props: any) {
     },
     { withCredentials: true }
     ).then(response => {
-			console.log('response')
+				// console.log('response')
       if (response.data.status === 'created') {
 				props.handleSuccessfulAuthentication(response.data)
 				navigate("/episodes")
       }
     }).catch(error => {
-        console.log("registration error", error)
+        // console.log("registration error", error)
     })
     event.preventDefault()
 	}

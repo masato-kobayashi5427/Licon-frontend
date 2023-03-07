@@ -83,17 +83,17 @@ export default function DetailUser(props: any) {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/users/${location.state.user_id}`)
       .then(resp => {
-        console.log(resp.data)
+        // console.log(resp.data)
         setDetail(resp.data)
       })
       .catch(e => {
-        console.log(e)
+        // console.log(e)
       })
   }, [props]);
 
   const DetailUser = (detail: any) => {
     if (detail.user !== undefined) {
-      console.log(detail)
+      // console.log(detail)
       return (
         <>
           <Main>

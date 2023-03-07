@@ -31,10 +31,10 @@ export default function AddEpisodeRoom(props: any) {
       },
     { withCredentials: true }
     ).then(response => {
-      console.log(response)
+      // console.log(response)
       navigate("/episode_rooms")
     }).catch(error => {
-      console.log("create room error", error)
+      // console.log("create room error", error)
     })
     event.preventDefault()
   }

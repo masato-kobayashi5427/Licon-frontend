@@ -212,21 +212,21 @@ export default function Chat(props) {
   const cable = useMemo(() => ActionCable.createConsumer(`${process.env.REACT_APP_API_ENDPOINT}/cable`, { withCredentials: true }), []);
 
   useEffect(() => {
-    console.log(cable)
+    // console.log(cable)
     // ChatChannelをサブスクライブ
     // receivedにメッセージを受信した時のメソッドを設定します。
     // 今回はreceivedMessageにメッセージをセットします。
     const sub = cable.subscriptions.create({ channel: "ChatChannel", room_id: props.episode_room_id }, {
       received: (msg) => setReceivedMessage(msg)
     });
-    console.log(sub)
+    // console.log(sub)
     setSubscription(sub);
   }, [cable]);
 
 // チャットHTMLの挿入
   useEffect(() => {
     if (!receivedMessage) return;
-    console.log(receivedMessage)
+    // console.log(receivedMessage)
     const { sender, body } = receivedMessage;
     if (receivedMessage.sender === userData.nickname) {
       if (body.includes('http://')) {
@@ -244,18 +244,18 @@ export default function Chat(props) {
         setText([text, <AwayChat id="history"><AwayImageContent src={body} alt="画像"></AwayImageContent></AwayChat>]);
       }
       else if (body.includes('data:image/png;base64,')) {
-        setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
+        setText([text, <AwayChat id="history"><AwayImageContent src={body} alt="画像"></AwayImageContent></AwayChat>]);
       }
       else {
         setText([text, <AwayChat id="history"><AwayChatBox id="chat">{sender}:{body}</AwayChatBox></AwayChat>]);
       }
     }
-    console.log(text)
+    // console.log(text)
   }, [receivedMessage]);
   
 // 最新のチャットまでスクロール
   useEffect(() => {
-    console.log(text)
+    // console.log(text)
     ref?.current?.scrollIntoView({
       behavior: "smooth",
     });
@@ -266,10 +266,10 @@ export default function Chat(props) {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT}/episode_rooms/${props.episode_room_id}/chats`, { withCredentials: true })
     .then(resp => {
       setChats(resp.data)
-      console.log(chats)
+      // console.log(chats)
     })
     .catch(e => {
-      console.log(e);
+      // console.log(e);
     })
   }, [props.episode_room_id])
 
@@ -318,11 +318,11 @@ export default function Chat(props) {
     },
     { withCredentials: true }
     ).then(response => {
-      console.log(response)
+      // console.log(response)
       subscription?.perform('chat', { body: input });
       setInput("")
     }).catch(error => {
-      console.log("create episode error", error)
+      // console.log("create episode error", error)
     })
   };
 
@@ -351,10 +351,10 @@ export default function Chat(props) {
     },
     { withCredentials: true }
     ).then(response => {
-      console.log(response)
+      // console.log(response)
       subscription?.perform('chat', { body: response.data.chat.image_url });
     }).catch(error => {
-        console.log("create chat error", error)
+        // console.log("create chat error", error)
     })
     event.preventDefault()
     setImage("");
@@ -370,10 +370,10 @@ export default function Chat(props) {
     },
     { withCredentials: true }
     ).then(response => {
-      console.log(response)
+      // console.log(response)
       subscription?.perform('chat', { body: response.data.chat.canvasUrl });
     }).catch(error => {
-      console.log("create canvas error", error)
+      // console.log("create canvas error", error)
     })
   };
 

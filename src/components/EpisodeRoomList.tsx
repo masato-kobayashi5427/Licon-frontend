@@ -97,11 +97,11 @@ export default function EpisodeRoomList(props: any) {
   useEffect(() => {
     axios.get(`${process.env.REACT_APP_API_ENDPOINT!}/episode_rooms`, { withCredentials: true })
     .then(resp => {
-      console.log(resp)
+      // console.log(resp)
       setEpisodeRooms(resp.data);
     })
-    .catch(e => {
-      console.log(e)
+    .catch(error => {
+      // console.log(error)
     })
   }, [])
 
