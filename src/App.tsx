@@ -1,5 +1,5 @@
 import React, { useState, useEffect, createContext } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import axios from 'axios'
 
@@ -36,7 +36,7 @@ export default function App(props: any) {
     id: 0,
     nickname: ''
   });
-
+  const navigate = useNavigate();
   const location = useLocation();
 
   const handleSuccessfulAuthentication = (data: any) => {
@@ -73,15 +73,14 @@ export default function App(props: any) {
 
   // ログアウト機能
   const handleLogoutClick = () => {
-    console.log('handleLogo')
     axios.delete(`${process.env.REACT_APP_API_ENDPOINT!}/logout`, { withCredentials: true })
     .then(response => {
       handleLogout()
+      navigate("/login")
     }).catch(error => console.log("ログアウトエラー", error))
   }
 
   const handleLogout = () => {
-    console.log('handleLogout')
     setLoggedInStatus("未ログイン")
     setUser({
       id: 0,
