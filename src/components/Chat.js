@@ -311,7 +311,7 @@ export default function Chat(props) {
     // ChatAreaの一番下までスクロールする
     const chatArea = chatAreaRef.current;
     chatArea.scrollTop = chatArea.scrollHeight;
-  }, [messages]); // messagesが更新されたときにスクロールを更新
+  }, []); // messagesが更新されたときにスクロールを更新
 
   const handleSend = () => {
     // inputをサーバーに送信
