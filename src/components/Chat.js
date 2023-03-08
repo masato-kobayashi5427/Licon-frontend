@@ -207,7 +207,6 @@ export default function Chat(props) {
 
   const userData =useContext(UserData);
   const ref = useRef();
-  const chatAreaRef = useRef(null);
 
   // Action Cableに接続
   const cable = useMemo(() => ActionCable.createConsumer(`${process.env.REACT_APP_API_ENDPOINT}/cable`, { withCredentials: true }), []);
@@ -260,7 +259,7 @@ export default function Chat(props) {
     ref?.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, [text]);
+  }, []);
 
 // チャット履歴を取得
   useEffect(() => {
@@ -283,7 +282,7 @@ export default function Chat(props) {
 // チャットを並べる
   const ChatList = (chats) => {
     return (
-      <div>
+      <>
       {chats.map((val, key) => {
         if ((val.canvasUrl !== null) && (val.user_id === userData.id)) {
           return (<HomeChat key={key}><HomeImageContent src={val.canvasUrl} alt="画像"></HomeImageContent></HomeChat>)
@@ -304,14 +303,8 @@ export default function Chat(props) {
           return(<AwayChat key={key}><ImageBox><AwayImageContent src={val.image_url} alt="画像"></AwayImageContent></ImageBox></AwayChat>)
         }
       })}
-      </div>
+      </>
   )};
-
-  useEffect(() => {
-    // ChatAreaの一番下までスクロールする
-    const chatArea = chatAreaRef.current;
-    chatArea.scrollTop = chatArea.scrollHeight;
-  }, []); // messagesが更新されたときにスクロールを更新
 
   const handleSend = () => {
     // inputをサーバーに送信
@@ -389,7 +382,7 @@ export default function Chat(props) {
     <>
       <Main>
         <ChatBackground id="backgound">
-          <ChatArea ref={chatAreaRef}>
+          <ChatArea>
             {ChatList(chats)}
             {text}
             <div ref={ref}></div>
