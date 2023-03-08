@@ -278,7 +278,7 @@ export default function Chat(props) {
   useEffect(() => {
     if (!chats) return;
     ChatList(chats)
-    ref?.current?.scrollIntoView({
+    chatAreaRef?.current?.scrollIntoView({
       behavior: "smooth",
     });
   }, [chats]);
