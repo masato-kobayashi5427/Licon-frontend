@@ -283,7 +283,7 @@ export default function Chat(props) {
 // チャットを並べる
   const ChatList = (chats) => {
     return (
-      <div ref={chatListRef}>
+      <div>
       {chats.map((val, key) => {
         if ((val.canvasUrl !== null) && (val.user_id === userData.id)) {
           return (<HomeChat key={key}><HomeImageContent src={val.canvasUrl} alt="画像"></HomeImageContent></HomeChat>)
@@ -387,7 +387,7 @@ export default function Chat(props) {
     <>
       <Main>
         <ChatBackground id="backgound">
-          <ChatArea>
+          <ChatArea ref={chatListRef}>
             {ChatList(chats)}
             {text}
             <div ref={ref}></div>
