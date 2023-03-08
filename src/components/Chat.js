@@ -24,7 +24,7 @@ const ChatArea = styled.div`
   background: #769ece;
   border: 1px solid #000;
   overflow-y: scroll;
-  overflow-x: hidden; /* ここを追加 */
+  overflow-x: hidden;
   padding-bottom: 10px;
 `;
 const HomeChat = styled.div`
@@ -207,6 +207,7 @@ export default function Chat(props) {
 
   const userData =useContext(UserData);
   const ref = useRef();
+  const chatListRef = useRef(null);
 
   // Action Cableに接続
   const cable = useMemo(() => ActionCable.createConsumer(`${process.env.REACT_APP_API_ENDPOINT}/cable`, { withCredentials: true }), []);
@@ -282,7 +283,7 @@ export default function Chat(props) {
 // チャットを並べる
   const ChatList = (chats) => {
     return (
-      <>
+      <div ref={chatListRef}>
       {chats.map((val, key) => {
         if ((val.canvasUrl !== null) && (val.user_id === userData.id)) {
           return (<HomeChat key={key}><HomeImageContent src={val.canvasUrl} alt="画像"></HomeImageContent></HomeChat>)
@@ -303,8 +304,12 @@ export default function Chat(props) {
           return(<AwayChat key={key}><ImageBox><AwayImageContent src={val.image_url} alt="画像"></AwayImageContent></ImageBox></AwayChat>)
         }
       })}
-      </>
+      </div>
   )};
+
+  useEffect(() => {
+    chatListRef.current.scrollTo(0, chatListRef.current.scrollHeight);
+  }, []);
 
   const handleSend = () => {
     // inputをサーバーに送信
