@@ -207,6 +207,7 @@ export default function Chat(props) {
 
   const userData =useContext(UserData);
   const ref = useRef();
+  const chatAreaRef = useRef(null);
 
   // Action Cableに接続
   const cable = useMemo(() => ActionCable.createConsumer(`${process.env.REACT_APP_API_ENDPOINT}/cable`, { withCredentials: true }), []);
@@ -285,7 +286,7 @@ export default function Chat(props) {
 // チャットを並べる
   const ChatList = (chats) => {
     return (
-      <>
+      <div ref={chatAreaRef}>
       {chats.map((val, key) => {
         if ((val.canvasUrl !== null) && (val.user_id === userData.id)) {
           return (<HomeChat key={key}><HomeImageContent src={val.canvasUrl} alt="画像"></HomeImageContent></HomeChat>)
@@ -306,7 +307,7 @@ export default function Chat(props) {
           return(<AwayChat key={key}><ImageBox><AwayImageContent src={val.image_url} alt="画像"></AwayImageContent></ImageBox></AwayChat>)
         }
       })}
-      </>
+      </div>
   )};
 
   const handleSend = () => {
