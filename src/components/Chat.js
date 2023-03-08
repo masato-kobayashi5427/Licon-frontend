@@ -278,10 +278,12 @@ export default function Chat(props) {
   useEffect(() => {
     if (!chats) return;
     ChatList(chats)
-    chatAreaRef?.current?.scrollIntoView({
-      behavior: "smooth",
-    });
   }, [chats]);
+
+  useEffect(() => {
+    const chatArea = ChatAreaRef.current;
+    chatArea.scrollTop = chatArea.scrollHeight;
+  }, [ChatAreaRef, messages]);
   
 // チャットを並べる
   const ChatList = (chats) => {
