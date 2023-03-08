@@ -259,7 +259,7 @@ export default function Chat(props) {
     ref?.current?.scrollIntoView({
       behavior: "smooth",
     });
-  }, []);
+  }, [text]);
 
 // チャット履歴を取得
   useEffect(() => {
@@ -277,6 +277,9 @@ export default function Chat(props) {
   useEffect(() => {
     if (!chats) return;
     ChatList(chats)
+    ref?.current?.scrollIntoView({
+      behavior: "smooth",
+    });
   }, [chats]);
   
 // チャットを並べる
