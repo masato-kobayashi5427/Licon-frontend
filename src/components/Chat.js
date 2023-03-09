@@ -18,7 +18,7 @@ const ChatBackground =styled.div`
 `
 const ChatArea = styled.div`
   height: 400px;
-  width: 80vw%;
+  width: 80vw;
   display: flex;
   flex-flow: column;
   background: #769ece;
@@ -219,14 +219,14 @@ export default function Chat(props) {
     const sub = cable.subscriptions.create({ channel: "ChatChannel", room_id: props.episode_room_id }, {
       received: (msg) => setReceivedMessage(msg)
     });
-    // console.log(sub)
+    console.log(sub)
     setSubscription(sub);
   }, [cable]);
 
 // チャットHTMLの挿入
   useEffect(() => {
     if (!receivedMessage) return;
-    // console.log(receivedMessage)
+    console.log(receivedMessage)
     const { sender, body } = receivedMessage;
     if (receivedMessage.sender === userData.nickname) {
       if (body.includes('http://')) {
