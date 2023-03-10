@@ -219,14 +219,14 @@ export default function Chat(props) {
     const sub = cable.subscriptions.create({ channel: "ChatChannel", room_id: props.episode_room_id }, {
       received: (msg) => setReceivedMessage(msg)
     });
-    console.log(sub)
+    // console.log(sub)
     setSubscription(sub);
   }, [cable]);
 
 // チャットHTMLの挿入
   useEffect(() => {
     if (!receivedMessage) return;
-    console.log(receivedMessage)
+    // console.log(receivedMessage);
     const { sender, body } = receivedMessage;
     if (receivedMessage.sender === userData.nickname) {
       if (body.includes('http://')) {
@@ -321,11 +321,11 @@ export default function Chat(props) {
     },
     { withCredentials: true }
     ).then(response => {
-      // console.log(response)
+      // console.log(response);
       subscription?.perform('chat', { body: input });
       setInput("")
     }).catch(error => {
-      // console.log("create episode error", error)
+      // console.log("create episode error", error);
     })
   };
 
@@ -354,14 +354,14 @@ export default function Chat(props) {
     },
     { withCredentials: true }
     ).then(response => {
-      // console.log(response)
+      // console.log(response);
       subscription?.perform('chat', { body: response.data.chat.image_url });
     }).catch(error => {
-        // console.log("create chat error", error)
+        // console.log("create chat error", error);
     })
     event.preventDefault()
     setImage("");
-	}
+	};
 
   const sendCanvas = () => {
     axios.post(`${process.env.REACT_APP_API_ENDPOINT}/episode_rooms/${props.episode_room_id}/chats`,
@@ -376,7 +376,7 @@ export default function Chat(props) {
       // console.log(response)
       subscription?.perform('chat', { body: response.data.chat.canvasUrl });
     }).catch(error => {
-      // console.log("create canvas error", error)
+      // console.log("create canvas error", error);
     })
   };
 
