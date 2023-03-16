@@ -9,6 +9,7 @@ https://github.com/masato-kobayashi5427/licon
 
 ## URL
 https://licon.vercel.app/
+只今、改良検討のため、セッションの機能停止中
 
 # 利用方法
 ## エピソード概要の投稿
