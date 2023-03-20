@@ -41,7 +41,7 @@ const SearchForm = styled.input`
 
 const List = styled.div`
   margin: 17px 14px;
-  font-size:  16px;
+  font-size: 16px;
 `
 
 const EpisodeContent = styled.div`
@@ -49,6 +49,7 @@ const EpisodeContent = styled.div`
   width: 90vw;
   display: flex;
   border: 2px solid black;
+  background-color: white;
 `
 
 const Sold = styled.img`

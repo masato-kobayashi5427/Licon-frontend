@@ -37,6 +37,7 @@ const EpisodeContent = styled.div`
   width: 90vw;
   display: flex;
   border: 2px solid black;
+  background-color: white;
 `
 
 const ImageBox = styled.div`
