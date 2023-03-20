@@ -91,7 +91,7 @@ export default function App(props: any) {
   return (  
     <AppView>
       <UserData.Provider value={user}>
-      <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus} />
+      <Top user={user} handleLogoutClick={handleLogoutClick} handleLogin={handleLogin} handleLogout={handleLogout} loggedInStatus={loggedInStatus}/>
       <div className="App">
       <AnimatePresence>
       <Routes location={location} key={location.pathname}>
