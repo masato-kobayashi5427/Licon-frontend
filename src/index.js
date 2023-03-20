@@ -11,7 +11,13 @@ ReactDOM.render(
       <Canvas style={{ width: '100%', height: '100%' }}>
         <ambientLight />
         <pointLight position={[10, 10, 10]} />
-        <ThreeCanvas />
+        <ThreeCanvas position={[0, 0, 0]} speed={5} radius={1} color={'red'}/>
+        <ThreeCanvas position={[1, 0, 0]} speed={5} radius={1} color={'orange'}/>
+        <ThreeCanvas position={[0, 1, 0]} speed={5} radius={1} color={'yellow'}/>
+        <ThreeCanvas position={[0, 0, 1]} speed={5} radius={1} color={'green'}/>
+        <ThreeCanvas position={[1, 1, 1]} speed={5} radius={1} color={'blue'}/>
+        <ThreeCanvas position={[1, 1, 1]} speed={5} radius={1} color={'#165e83'}/>
+        <ThreeCanvas position={[1, 1, 1]} speed={5} radius={1} color={'purple'}/>
       </Canvas>
     </div>
     <App />
