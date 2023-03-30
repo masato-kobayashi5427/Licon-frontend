@@ -26,6 +26,19 @@ interface EpisodeRoom {
   }
 }
 
+const MainView = styled.div`
+  padding: 24px
+`
+
+const EpisodeList = styled.h2`
+  text-align: center;
+  width: auto;
+  padding: 10px;
+  margin: 4px 14px 4px 0;
+  background-color: white;
+  color: #333;
+  border-radius: 20px;
+`
 
 const List = styled.div`
   margin: 17px 14px;
@@ -146,10 +159,12 @@ export default function EpisodeRoomList(props: any) {
 
   return (
     <>
-      <h1>EpisodeRoom List</h1>
-      <div>
-        {RoomList(props.user.id)}
-      </div>
+      <MainView>
+        <EpisodeList>EpisodeRoom List</EpisodeList>
+        <div>
+          {RoomList(props.user.id)}
+        </div>
+      </MainView>
     </>
   )
 }

@@ -7,7 +7,6 @@ const ChatSpace = styled.div`
   width: 100%;
 `
 
-
 export default function EpisodeRoom(props: any) {
   const location = useLocation();
   const episode_room_id = location.state

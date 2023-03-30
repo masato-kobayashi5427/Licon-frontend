@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import ActionCable from 'actioncable';
 import { UserData} from '../App'
 import Canvas from './Canvas';
+import background from "../images/木目.png";
 
 const Main =styled.div`
   height: 80%;
@@ -18,7 +19,7 @@ const ChatBackground =styled.div`
 `
 const ChatArea = styled.div`
   height: 400px;
-  width: 80vw;
+  width: 90vw;
   display: flex;
   flex-flow: column;
   background: #769ece;
@@ -113,7 +114,8 @@ const HomeChatBox = styled.div`
   }
 `;
 const InputArea = styled.div`
-  width: 90%;
+  width: 100%;
+  padding: 10px;
   margin: 0 auto;
 `
 
@@ -391,7 +393,7 @@ export default function Chat(props) {
             <div ref={ref}></div>
           </ChatArea>
         </ChatBackground>
-        <InputArea>
+        <InputArea  style={{ backgroundImage: `url(${background})` }}>
           {/* テキストを投稿する機能 */}
           <TextSubmitArea>
             <TextInput

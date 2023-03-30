@@ -29,6 +29,7 @@ const CanvasWrapper = styled.div`
 
 const Canpas = styled.canvas`
   border: 1px solid #000000;
+  background-color: white;
   cursor: crosshair;
 `;
 
@@ -155,7 +156,7 @@ const Canvas: React.FC<IProps> = (props) => {
         />
       </CanvasWrapper>
       <div>
-        <div> 色を変更</div>
+        <div style={{ color: `white` }}> 色を変更</div>
         <ColorPicker value={color} onChange={(e) => setColor(e.target.value)} />
         <RangeInput
           type="range"
@@ -164,8 +165,8 @@ const Canvas: React.FC<IProps> = (props) => {
           value={lineWidth} // lineWidthを設定
           onChange={(e) => setLineWidth(Number(e.target.value))}
         />
-        <span>線の幅：{lineWidth}</span>
-        <input type="file" onChange={OnChange} />
+        <span style={{ color: `white` }}>線の幅：{lineWidth}</span>
+        <input type="file" onChange={OnChange} style={{ color: `white` }}/>
         <button onClick={DrawImage}>画像を描画する</button>
       </div>
       <div>

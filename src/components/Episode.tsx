@@ -28,8 +28,14 @@ const SearchArea = styled.div`
   width: 90vw;
   margin: 0 8px;
 `
-const EpisodeList = styled.h1`
-  margin: 4px 14px;
+const EpisodeList = styled.h2`
+  text-align: center;
+  width: auto;
+  padding: 10px;
+  margin: 4px 14px 4px 0;
+  background-color: white;
+  color: #333;
+  border-radius: 20px;
 `
 
 const SearchForm = styled.input`
