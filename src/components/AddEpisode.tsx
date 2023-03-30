@@ -110,57 +110,57 @@ export default function AddEpisode(props: AddEpisodeProps) {
 
 	return (
 		<Background style={{ backgroundImage: `url(${background})` }}>
-  <form onSubmit={handleSubmit} className="form">
-    <div className='form-main'>
-      <p>新規登録</p>
-      <ErrorMessage>{error_message.title}</ErrorMessage>
-      <Label htmlFor="title">タイトル</Label>
-      <Input
-        className="textfield"
-        type="title"
-        id="title"
-        name="title"
-        placeholder="タイトル"
-        value={title}
-        onChange={event => setTitle(event.target.value)}
-      />
-      <ErrorMessage>{error_message.explain}</ErrorMessage>
-      <Label htmlFor="explain">説明文</Label>
-      <Input
-        className="textfield"
-        type="explain"
-        id="explain"
-        name="explain"
-        placeholder="説明文"
-        value={explain}
-        onChange={event => setExplain(event.target.value)}
-      />
-      <ErrorMessage>{error_message.price}</ErrorMessage>
-      <Label htmlFor="price">価格</Label>
-      <Input
-        className="textfield"
-        type="price"
-        id="price"
-        name="price"
-        placeholder="価格"
-        value={price}
-        onChange={(event: any) => setPrice(event.target.value)}
-      />
-      <ErrorMessage>{error_message.category}</ErrorMessage>
-      <Label htmlFor="category">カテゴリ</Label>
-      <CategoryList category={category} setCategory={setCategory} />
-      <ErrorMessage>{error_message.limit}</ErrorMessage>
-      <Label htmlFor="limit">公開期限</Label>
-      <Limit limit={limit} setLimit={setLimit} />
-      <ErrorMessage>{error_message.period}</ErrorMessage>
-      <Label htmlFor="period">公開期間（日数）</Label>
-      <Period period={period} setPeriod={setPeriod} />
-      <ErrorMessage>{error_message.image}</ErrorMessage>
-      <Label htmlFor="image">画像</Label>
-      <Input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect} />
-      <button type="submit" className='btn'>登録</button>
-    </div>
-  </form>
-</Background>
+    <form onSubmit={handleSubmit} className="form">
+      <div className='form-main'>
+        <p>新規登録</p>
+        <ErrorMessage>{error_message.title}</ErrorMessage>
+        <Label htmlFor="title">タイトル</Label>
+        <Input
+          className="textfield"
+          type="title"
+          id="title"
+          name="title"
+          placeholder="タイトル"
+          value={title}
+          onChange={event => setTitle(event.target.value)}
+        />
+        <ErrorMessage>{error_message.explain}</ErrorMessage>
+        <Label htmlFor="explain">説明文</Label>
+        <Input
+          className="textfield"
+          type="explain"
+          id="explain"
+          name="explain"
+          placeholder="説明文"
+          value={explain}
+          onChange={event => setExplain(event.target.value)}
+        />
+        <ErrorMessage>{error_message.price}</ErrorMessage>
+        <Label htmlFor="price">価格</Label>
+        <Input
+          className="textfield"
+          type="price"
+          id="price"
+          name="price"
+          placeholder="価格"
+          value={price}
+          onChange={(event: any) => setPrice(event.target.value)}
+        />
+        <ErrorMessage>{error_message.category}</ErrorMessage>
+        <Label htmlFor="category">カテゴリ</Label>
+        <CategoryList category={category} setCategory={setCategory} />
+        <ErrorMessage>{error_message.limit}</ErrorMessage>
+        <Label htmlFor="limit">公開期限</Label>
+        <Limit limit={limit} setLimit={setLimit} />
+        <ErrorMessage>{error_message.period}</ErrorMessage>
+        <Label htmlFor="period">公開期間（日数）</Label>
+        <Period period={period} setPeriod={setPeriod} />
+        <ErrorMessage>{error_message.image}</ErrorMessage>
+        <Label htmlFor="image">画像</Label>
+        <Input type="file" name="image" id="image" accept="image/*,.png,.jpg,.jpeg,.gif" onChange={handleImageSelect} />
+        <button type="submit" className='btn'>登録</button>
+      </div>
+    </form>
+    </Background>
 	)
 }

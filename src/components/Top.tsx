@@ -2,6 +2,32 @@ import React from 'react';
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
+const ButtonLink = styled(Link)`
+  background-color: #ffffff;
+  color: #333;
+  border: 2px solid black;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+`;
+
+const LogoutButton = styled.button`
+  background-color: #ffffff;
+  color: #000000;
+  border: 2px solid #000000;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  text-decoration: none;
+  &:hover {
+    background-color: #000000;
+    color: #ffffff;
+  }
+`;
+
 const LoginMenu = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -27,14 +53,14 @@ export default function Top(props: any) {
     if (loggedInStatus === "未ログイン") {
       return (
       <LoginMenu>
-        <Link to="/login" className='nav-item'>ログイン</Link>
-        <Link to="/registration" className='nav-item'>新規登録</Link>
+        <ButtonLink to="/login" className='nav-item'>ログイン</ButtonLink>
+        <ButtonLink to="/registration" className='nav-item'>新規登録</ButtonLink>
       </LoginMenu>)}
     else {
       return (
         <LoginMenu>
-          <Link to={"/users/" + props.user.id + "/show"} state={{user_id: props.user.id}}>{props.user.nickname}さん</Link>
-          <button onClick={props.handleLogoutClick}>ログアウト</button>
+          <ButtonLink to={"/users/" + props.user.id + "/show"} state={{user_id: props.user.id}}>{props.user.nickname}さん</ButtonLink>
+          <LogoutButton onClick={props.handleLogoutClick}>ログアウト</LogoutButton>
         </LoginMenu>
       )
     }

@@ -3,10 +3,16 @@ import axios from 'axios'
 import { useLocation } from 'react-router-dom';
 import { Link } from 'react-router-dom'
 import styled from 'styled-components';
+import background from "../images/木目.png";
 
-const Main = styled.div`
-  width: 90vw;
-  margin: 0 auto;
+
+const Background = styled.div`
+  color: white;
+	height: 100%;
+	width: 90vw;
+  margin: auto;
+  padding 15px;
+  border-radius: 10px;
 `
 
 const DetailUserWrapper = styled.div`
@@ -18,9 +24,13 @@ const DetailUserWrapper = styled.div`
 
 const DetailWrapper = styled.div`
   scroll-snap-align: start;
+  background-color: white;
+  height: 450px;
   width: 300px;
   margin-right: 20px;
+  padding: 10px;
   flex-shrink: 0;
+  border-radius: 10px;
 `
 
 const ImageBox = styled.div`
@@ -96,7 +106,7 @@ export default function DetailUser(props: any) {
       // console.log(detail)
       return (
         <>
-          <Main>
+          <Background style={{ backgroundImage: `url(${background})` }}>
             <PageTitle>{detail.user.nickname}さんのページ</PageTitle>
             <MainWrapper>紹介文</MainWrapper>
             <UserIntroduction>{detail.user.introduction}</UserIntroduction>
@@ -119,7 +129,7 @@ export default function DetailUser(props: any) {
                 )
               })}
             </DetailUserWrapper>
-          </Main>
+          </Background>
         </>
       )
     } else {
