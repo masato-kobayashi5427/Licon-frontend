@@ -110,7 +110,7 @@ const Canvas: React.FC<IProps> = (props) => {
     mouseX = x;
     mouseY = y;
     if (canvasRef.current) {
-      setCanvasUrl(canvasRef.current.toDataURL());
+      setCanvasUrl(canvasRef.current.toDataURL('image/jpeg', 0.1));
     }
   }
 

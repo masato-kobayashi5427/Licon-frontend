@@ -234,7 +234,7 @@ export default function Chat(props) {
       if (body.includes('http://')) {
         setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
       }
-      else if (body.includes('data:image/png;base64,')) {
+      else if (body.includes('data:image/jpeg;base64,')) {
         setText([text, <HomeChat id="history"><HomeImageContent src={body} alt="画像"></HomeImageContent></HomeChat>]);
       }
       else {
@@ -245,7 +245,7 @@ export default function Chat(props) {
       if (body.includes('http://')) {
         setText([text, <AwayChat id="history"><AwayImageContent src={body} alt="画像"></AwayImageContent></AwayChat>]);
       }
-      else if (body.includes('data:image/png;base64,')) {
+      else if (body.includes('data:image/jpeg;base64,')) {
         setText([text, <AwayChat id="history"><AwayImageContent src={body} alt="画像"></AwayImageContent></AwayChat>]);
       }
       else {
